@@ -1,0 +1,13 @@
+@import url('./assets/normolize.css');
+@import './variables.scss';
+
+@font-face {
+  font-family: TildaSans;
+  src: url('../static/fonts/TildaSans-VF.woff2') format('woff2'),
+      url('../static/fonts/TildaSans-VF.woff') format('woff'),
+      url('../static/fonts/TildaSans-VF.ttf') format('truetype');
+} 
+
+body {
+  font-family: 'TildaSans', Arial, sans-serif;
+}
