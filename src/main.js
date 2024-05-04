@@ -70,37 +70,35 @@ const editProfilePageContent = profilePageDelegate({
 const editPasswordDelegate = Handlebars.compile(editPasswordPage);
 const editPasswordContent = editPasswordDelegate();
 
-const currentPageUrl = window.location.pathname;
-console.log(currentPageUrl);
+const pages = {
+  login: loginPageContent,
+  registration: registrationPageContent,
+  feed: feedPageContent,
+  profile: profilePageContent,
+  edit: editProfilePageContent,
+  password: editPasswordContent,
+  error: errorPageContent,
+  default: mainPageContent,
+};
 
-let page;
-
-switch (currentPageUrl) {
-  case '/login':
-    page = loginPageContent;
-    break;
-  case '/registration':
-    page = registrationPageContent;
-    break;
-  case '/feed':
-    page = feedPageContent;
-    break;
-  case '/profile':
-    page = profilePageContent;
-    break;
-  case '/profile/edit':
-    page = editProfilePageContent;
-    break;
-  case '/password':
-    page = editPasswordContent;
-    break;
-  case '/error':
-    page = errorPageContent;
-    break;
-  default:
-    page = mainPageContent;
-}
+let page = mainPageContent;
 
 root.innerHTML = basicLayoutTmpl({
   content: page,
 });
+
+
+const links = Array.from(document.querySelectorAll('.navigation__link'));
+
+links.forEach((link) => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const urlItems = e.target.href.split('/');
+    const href = urlItems[urlItems.length - 1];
+
+    root.innerHTML = basicLayoutTmpl({
+      content: pages[href],
+    });
+  })
+})
