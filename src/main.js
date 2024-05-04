@@ -1,6 +1,7 @@
 import Handlebars from 'handlebars';
 import basicLayout from './layout/main';
 import {
+  mainPage,
   loginPage,
   registrationPage,
   feedPage,
@@ -34,6 +35,9 @@ Handlebars.registerPartial('chat', chat);
 
 const basicLayoutTmpl = Handlebars.compile(basicLayout);
 
+const mainPageDelegate = Handlebars.compile(mainPage);
+const mainPageContent = mainPageDelegate();
+
 const loginPageDelegate = Handlebars.compile(loginPage);
 const loginPageContent = loginPageDelegate({
   headline: 'Вход',
@@ -59,10 +63,44 @@ const profilePageDelegate = Handlebars.compile(profilePage);
 const profilePageContent = profilePageDelegate({
   isEdit: false,
 });
+const editProfilePageContent = profilePageDelegate({
+  isEdit: true,
+});
 
 const editPasswordDelegate = Handlebars.compile(editPasswordPage);
 const editPasswordContent = editPasswordDelegate();
 
+const currentPageUrl = window.location.pathname;
+console.log(currentPageUrl);
+
+let page;
+
+switch (currentPageUrl) {
+  case '/login':
+    page = loginPageContent;
+    break;
+  case '/registration':
+    page = registrationPageContent;
+    break;
+  case '/feed':
+    page = feedPageContent;
+    break;
+  case '/profile':
+    page = profilePageContent;
+    break;
+  case '/profile/edit':
+    page = editProfilePageContent;
+    break;
+  case '/password':
+    page = editPasswordContent;
+    break;
+  case '/error':
+    page = errorPageContent;
+    break;
+  default:
+    page = mainPageContent;
+}
+
 root.innerHTML = basicLayoutTmpl({
-  content: editPasswordContent,
+  content: page,
 });
