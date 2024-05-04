@@ -1,24 +1,22 @@
 import './login-form.scss';
 
 export const template = `
-  <form class="form">
+  <form class="login-form">
     {{> input 
-          title="Логин"
+          label="Логин"
           name="login" 
           type="text" 
     }}
     {{> input 
-          title="Пароль" 
-          name="pass" 
+          label="Пароль" 
+          name="password" 
           type="password" 
     }}
 
-    <div class="form__controls">
-      {{> button name="Авторизоваться" }}
-      <a
-        href="#"
-        class="form__link"
-      >
+    <div class="login-form__controls">
+      {{> button name="Войти" }}
+
+      <a href="#" class="login-form__link">
         Нет аккаунта?
       </a>
     </div>

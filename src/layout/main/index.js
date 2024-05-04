@@ -1,3 +1,3 @@
-import { template } from "./main.tmpl";
+import { template } from './main.tmpl';
 
 export default template;

@@ -1,3 +1,3 @@
-import { template } from "./login.tmpl";
+import { template } from './login.tmpl';
 
 export default template;

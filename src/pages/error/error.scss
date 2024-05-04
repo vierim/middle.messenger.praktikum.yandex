@@ -6,25 +6,28 @@
   align-items: center;
 
   &__code {
-    font-size: 48px;
+    font-size: 36px;
     line-height: 1;
     margin: 0 0 30px;
   }
 
   &__text {
-    font-size: 24px;
+    font-size: 20px;
     line-height: 1;
     margin: 0 0 70px;
   }
 
   &__link {
-    text-decoration: 0;
-    font-size: 18px;
+    font-size: 14px;
+    line-height: 1;
     color: $primary-color;
-    transition: color 0.3s linear;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.3s linear, border-color 0.2s linear;
 
     &:hover {
       color: $primary-color-hover;
+      border-color: $primary-color-hover;
     }
   }
 }

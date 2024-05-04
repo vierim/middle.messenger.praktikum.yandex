@@ -3,9 +3,9 @@ import './login.scss';
 export const template = `
   <div class="container">
     <h1 class="container__headline">
-      {{ title }}
+      {{ headline }}
     </h1>
 
-    {{> form }}
+    {{> login-form }}
   </div>
 `;

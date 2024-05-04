@@ -3,7 +3,11 @@ import './input.scss';
 export const template = `
   <div class="input">
     <input
-      class="input__field"
+      {{#if error }}
+        class="input__field input__field_error"
+        {{ else }}
+        class="input__field"
+      {{/if}}
       name={{ name }}
       type={{ type }}
       id={{ name }}
@@ -11,9 +15,15 @@ export const template = `
     >
     <label 
       class="input__label"
-      for={{name}}
+      for={{ name }}
     >
-      {{ title }}
+      {{ label }}
     </label>
+
+    {{#if error }}
+      <span class="input__error-text">
+        {{ error }}
+      </span>
+    {{/if}}
   </div>
 `;

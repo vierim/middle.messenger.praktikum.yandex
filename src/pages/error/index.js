@@ -1,3 +1,3 @@
-import { template } from "./error.tmpl";
+import { template } from './error.tmpl';
 
 export default template;
