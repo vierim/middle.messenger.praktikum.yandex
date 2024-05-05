@@ -82,7 +82,7 @@
 .conversation {
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: auto;
   scroll-behavior: auto;
   scrollbar-width: thin;
 

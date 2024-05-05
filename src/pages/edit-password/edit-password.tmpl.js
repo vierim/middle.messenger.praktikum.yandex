@@ -6,24 +6,17 @@ export const template = `
   <div class="profile">
     <button class="profile__back-btn"></button>
     <div class="profile__container">
-      <div class="profile__avatar-container">
-        <img 
-          class="profile__avatar"
-          src=${noAvatarPic}
-          alt="Имя"
-        >
-        <button class="profile__avatar-btn">Поменять<br> аватар</button>
-      </div>
+      {{> avatar name="Иван" changeable=true }}
 
       <ul class="chars-list profile__chars-list">
         <li class="chars-list__item">
-          <label for="email" class="chars-list__name">
+          <label for="old-password" class="chars-list__name">
             Старый пароль
           </label>
           <input 
             type="password" 
-            name="old-password" 
-            id="email" 
+            name="oldPassword" 
+            id="old-password" 
             class="chars-list__value" 
             value="12345" 
           >
@@ -35,7 +28,7 @@ export const template = `
           </label>
           <input 
             type="password" 
-            name="password" 
+            name="newPassword" 
             id="password" 
             class="chars-list__value" 
             value="12345678" 

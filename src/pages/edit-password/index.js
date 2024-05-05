@@ -1,3 +1,3 @@
-import { template } from './edit-password';
+import { template } from './edit-password.tmpl';
 
 export default template;
