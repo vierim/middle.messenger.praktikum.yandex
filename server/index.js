@@ -11,7 +11,7 @@ const pathName = resolve(__dirname, '../dist/index.html');
 
 app.use(express.static('./dist'));
 
-app.get('/*', (req, res) => {
+app.get('/*', (_, res) => {
   res.sendFile(pathName);
 });
 
