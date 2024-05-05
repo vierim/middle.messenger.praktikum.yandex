@@ -71,17 +71,6 @@ const editProfilePageContent = profilePageDelegate({
 const editPasswordDelegate = Handlebars.compile(editPasswordPage);
 const editPasswordContent = editPasswordDelegate();
 
-// const pages = {
-//   login: loginPageContent,
-//   registration: registrationPageContent,
-//   feed: feedPageContent,
-//   profile: profilePageContent,
-//   edit: editProfilePageContent,
-//   password: editPasswordContent,
-//   error: errorPageContent,
-//   default: mainPageContent,
-// };
-
 const currentPageUrl = window.location.pathname;
 let page;
 
@@ -114,19 +103,3 @@ switch (currentPageUrl) {
 root.innerHTML = basicLayoutTmpl({
   content: page,
 });
-
-
-// const links = Array.from(document.querySelectorAll('.navigation__link'));
-
-// links.forEach((link) => {
-//   link.addEventListener('click', (e) => {
-//     e.preventDefault();
-
-//     const urlItems = e.target.href.split('/');
-//     const href = urlItems[urlItems.length - 1];
-
-//     root.innerHTML = basicLayoutTmpl({
-//       content: pages[href],
-//     });
-//   })
-// })
