@@ -16,7 +16,7 @@ export const template = `
     <div class="login-form__controls">
       {{> button name="Войти" }}
 
-      <a href="#" class="login-form__link">
+      <a href="/registration" class="login-form__link">
         Нет аккаунта?
       </a>
     </div>

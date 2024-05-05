@@ -43,7 +43,7 @@ export const template = `
     <div class="registration-form__controls">
       {{> button name="Зарегистрироваться" }}
 
-      <a href="#" class="registration-form__link">
+      <a href="login" class="registration-form__link">
         Войти
       </a>
     </div>

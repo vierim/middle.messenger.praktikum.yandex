@@ -17,7 +17,7 @@ import {
   contactItem,
   chat,
 } from './modules';
-import { button, menuButton, input } from './components';
+import { button, menuButton, input, avatar } from './components';
 import { messages } from './modules/contacts-list/mock-data';
 import './index.scss';
 
@@ -29,6 +29,7 @@ Handlebars.registerPartial('menu-button', menuButton);
 Handlebars.registerPartial('login-form', loginForm);
 Handlebars.registerPartial('registration-form', registrationForm);
 Handlebars.registerPartial('search-bar', searchBar);
+Handlebars.registerPartial('avatar', avatar);
 Handlebars.registerPartial('contacts-list', contactsList);
 Handlebars.registerPartial('contact-item', contactItem);
 Handlebars.registerPartial('chat', chat);
@@ -70,35 +71,62 @@ const editProfilePageContent = profilePageDelegate({
 const editPasswordDelegate = Handlebars.compile(editPasswordPage);
 const editPasswordContent = editPasswordDelegate();
 
-const pages = {
-  login: loginPageContent,
-  registration: registrationPageContent,
-  feed: feedPageContent,
-  profile: profilePageContent,
-  edit: editProfilePageContent,
-  password: editPasswordContent,
-  error: errorPageContent,
-  default: mainPageContent,
-};
+// const pages = {
+//   login: loginPageContent,
+//   registration: registrationPageContent,
+//   feed: feedPageContent,
+//   profile: profilePageContent,
+//   edit: editProfilePageContent,
+//   password: editPasswordContent,
+//   error: errorPageContent,
+//   default: mainPageContent,
+// };
 
-let page = mainPageContent;
+const currentPageUrl = window.location.pathname;
+let page;
+
+switch (currentPageUrl) {
+  case '/login':
+    page = loginPageContent;
+    break;
+  case '/registration':
+    page = registrationPageContent;
+    break;
+  case '/feed':
+    page = feedPageContent;
+    break;
+  case '/profile':
+    page = profilePageContent;
+    break;
+  case '/edit':
+    page = editProfilePageContent;
+    break;
+  case '/password':
+    page = editPasswordContent;
+    break;
+  case '/error':
+    page = errorPageContent;
+    break;
+  default:
+    page = mainPageContent;
+}
 
 root.innerHTML = basicLayoutTmpl({
   content: page,
 });
 
 
-const links = Array.from(document.querySelectorAll('.navigation__link'));
+// const links = Array.from(document.querySelectorAll('.navigation__link'));
 
-links.forEach((link) => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
+// links.forEach((link) => {
+//   link.addEventListener('click', (e) => {
+//     e.preventDefault();
 
-    const urlItems = e.target.href.split('/');
-    const href = urlItems[urlItems.length - 1];
+//     const urlItems = e.target.href.split('/');
+//     const href = urlItems[urlItems.length - 1];
 
-    root.innerHTML = basicLayoutTmpl({
-      content: pages[href],
-    });
-  })
-})
+//     root.innerHTML = basicLayoutTmpl({
+//       content: pages[href],
+//     });
+//   })
+// })
