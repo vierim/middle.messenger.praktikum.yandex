@@ -8,8 +8,9 @@ export const template = `
       src=${noAvatarPic}
       alt="{{ name }}"
     >
+
     {{#if changeable }}
-      <button class="profile__avatar-btn">Поменять<br> аватар</button>
+      <button class="avatar__change-btn">Поменять<br> аватар</button>
     {{/if}}
   </div>
 `;
