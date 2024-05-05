@@ -1,4 +1,4 @@
-import noAvatarPic from '../../static/images/noavatar2.svg';
+
 
 import './profile.scss';
 
@@ -6,19 +6,11 @@ export const template = `
   <div class="profile">
     <button class="profile__back-btn"></button>
     <div class="profile__container">
-      <div class="profile__avatar-container">
-        <img 
-          class="profile__avatar"
-          src=${noAvatarPic}
-          alt="Имя"
-        >
-        <button class="profile__avatar-btn">Поменять<br> аватар</button>
-      </div>
-
+      {{> avatar name="Иван" changeable=true }}
       
       {{#unless isEdit}}
-      <h1 class="profile__name">Иван</h1>
-            {{/unless}}
+        <h1 class="profile__name">Иван</h1>
+      {{/unless}}
 
       <ul class="chars-list profile__chars-list">
         <li class="chars-list__item">
