@@ -1,9 +1,10 @@
 import Handlebars from 'handlebars';
 import { Component } from '../../core/component';
 import { template } from './char.tmpl';
+import { Props } from '../../core/component/types';
 
 export class Char extends Component {
-  constructor(props: any) {
+  constructor(props: Props) {
     super('div', { ...props, class: 'char' });
   }
 

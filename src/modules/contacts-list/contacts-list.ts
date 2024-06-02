@@ -1,9 +1,9 @@
 import { Component } from '../../core/component';
-import ContactsItem from './components/contact-item';
+import { Props } from '../../core/component/types';
 import { template } from './contacts-list.tmpl';
 
 export class ContactsList extends Component {
-  constructor(props?: any) {
+  constructor(props?: Props) {
     super('div', {
       ...props,
       class: 'contacts',

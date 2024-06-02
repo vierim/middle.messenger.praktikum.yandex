@@ -1,10 +1,11 @@
 import { PageComponent } from '../../core/page';
 import { handleFieldValidity, handleFormSubmit } from '../../core/helpers/forms';
+import { Props } from '../../core/component/types';
 import { Avatar, Char, Button } from '../../components';
 import { template } from './profile-page.tmpl';
 
 class ProfilePageFactory extends PageComponent {
-  constructor(template: string, props?: any) {
+  constructor(template: string, props?: Props) {
     super(template, props);
   }
 }

@@ -3,6 +3,7 @@ import {
   handleFieldValidity,
   handleFormSubmit,
 } from '../../core/helpers/forms';
+import { Props } from '../../core/component/types';
 import { Input, Button } from '../../components';
 import { template } from './registration-page.tmpl';
 
@@ -92,7 +93,7 @@ const button = new Button({
 });
 
 class RegistrationPageFactory extends PageComponent {
-  constructor(template: string, props?: any) {
+  constructor(template: string, props?: Props) {
     super(template, {
       ...props,
       ...registrationForm,

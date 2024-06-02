@@ -5,6 +5,7 @@ import {
 } from '../../core/helpers/forms';
 import { Input, Button } from '../../components';
 import { template } from './login-page.tmpl';
+import { Props } from '../../core/component/types';
 
 const login = new Input({
   label: 'Логин',
@@ -38,7 +39,7 @@ const button = new Button({
 });
 
 class LoginPageFactory extends PageComponent {
-  constructor(template: string, props?: any) {
+  constructor(template: string, props?: Props) {
     super(template, {
       ...props,
       login,

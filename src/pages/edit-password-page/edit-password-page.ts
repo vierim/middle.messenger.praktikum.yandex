@@ -2,9 +2,10 @@ import { PageComponent } from '../../core/page';
 import { Avatar, Button, Char } from '../../components';
 import { template } from './edit-password-page.tmpl';
 import { handleFieldValidity, handleFormSubmit } from '../../core/helpers/forms';
+import { Props } from '../../core/component/types';
 
 class EditPasswordPageFactory extends PageComponent {
-  constructor(props?: any) {
+  constructor(props?: Props) {
     super(template, props );
   }
 }

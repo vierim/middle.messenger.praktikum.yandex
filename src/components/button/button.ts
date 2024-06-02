@@ -1,8 +1,9 @@
 import { Component } from '../../core/component';
+import { Props } from '../../core/component/types';
 import { template } from './button.tmpl';
 
 export class Button extends Component {
-  constructor(props?: any) {
+  constructor(props?: Props) {
     super('button', { ...props, class: 'btn' });
   }
 

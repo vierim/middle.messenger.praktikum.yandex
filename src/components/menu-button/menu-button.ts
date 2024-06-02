@@ -1,9 +1,10 @@
 import Handlebars from 'handlebars';
 import { Component } from '../../core/component';
 import { template } from './menu-button.tmpl';
+import { Props } from '../../core/component/types';
 
 export class MenuButton extends Component {
-  constructor(props?: any) {
+  constructor(props?: Props) {
     super('button', { 
       ...props, 
       class: 'menu-button' 

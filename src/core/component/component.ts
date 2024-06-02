@@ -2,6 +2,7 @@ import { v4 as makeUUID } from 'uuid';
 import Handlebars from 'handlebars';
 
 import { EventBus } from '../event-bus';
+import { Children, Lists, Props } from './types';
 
 export default class Component {
   static EVENTS = {
@@ -11,25 +12,20 @@ export default class Component {
     FLOW_RENDER: 'flow:render',
   };
 
-  _element: any = null;
-  _meta: any = null;
-  _id: string | null = null;
-  _props: any;
-  _children: any;
-  _lists: any;
+  private _element: HTMLElement | null = null;
+  private _tagName: string = '';
+  public _id: string | null = null;
+  private _props: Props;
+  private _children: Children;
+  private _lists: Lists;
 
   eventBus: () => EventBus;
 
-  constructor(tagName = 'div', proposals = {}) {
+  constructor(tagName = 'div', proposals: Props = {}) {
     const eventBus = new EventBus();
-
-    this._meta = {
-      tagName,
-    };
+    this._tagName = tagName;
 
     this._id = makeUUID();
-
-    // console.log({...proposals});
 
     const { children, props, lists } = this._separateProps(proposals);
 
@@ -38,72 +34,71 @@ export default class Component {
     this._lists = lists;
     this.eventBus = () => eventBus;
 
-    // console.log({...this});
-    // console.log({
-    //   props: {...this._props},
-    //   children: {...this._children},
-    //   lists: {...this._lists},
-    // });
-
     this._registerEvents(eventBus);
     eventBus.emit(Component.EVENTS.INIT);
   }
 
-  _registerEvents(eventBus: any) {
+  _registerEvents(eventBus: EventBus) {
     eventBus.on(Component.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Component.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Component.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
     eventBus.on(Component.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
-  _createResources(tagName: any) {
+  _createResources(tagName: string) {
     this._element = this._createDocumentElement(tagName);
   }
 
   init() {
-    const { tagName } = this._meta;
-    this._createResources(tagName);
+    this._createResources(this._tagName);
     this.eventBus().emit(Component.EVENTS.FLOW_RENDER);
   }
 
   _componentDidMount() {
     this.componentDidMount();
 
-    Object.values(this._).forEach((child) => {
-      child.dispatchComponentDidMount();
+    Object.values(this._children).forEach((child) => {
+      if (child instanceof Component) {
+        child.dispatchComponentDidMount();
+      }
     });
   }
 
-  componentDidMount(oldProps?: any) {}
+  componentDidMount() {}
 
   dispatchComponentDidMount() {
     this.eventBus().emit(Component.EVENTS.FLOW_CDM);
   }
 
-  _componentDidUpdate(oldProps: any, newProps: any) {
+  _componentDidUpdate(oldProps?: Props, newProps?: Props) {
     const response = this.componentDidUpdate(oldProps, newProps);
     if (!response) {
       return;
     }
+
     this._render();
   }
 
-  componentDidUpdate(oldProps: any, newProps: any) {
+  componentDidUpdate(oldProps?: Props, newProps?: Props) {
+    if(oldProps !== newProps) {
+      return false;
+    }
+    
     return true;
   }
 
-  _separateProps(proposals: any) {
-    const props: any = {};
-    const lists: any = {};
-    const children: any = {};
+  _separateProps(proposals: Props) {
+    const props: Props = {};
+    const lists: Lists = {};
+    const children: Children = {};
 
     Object.entries(proposals).forEach(([key, value]) => {
       if (value instanceof Component) {
         children[key] = value;
-      } else if(Array.isArray(value)) {
+      } else if (Array.isArray(value)) {
         const hasChildren = value.some((item) => item instanceof Component);
-        
-        if(hasChildren) {
+
+        if (hasChildren) {
           lists[key] = value;
         } else {
           props[key] = value;
@@ -116,7 +111,7 @@ export default class Component {
     return { children, props, lists };
   }
 
-  setProps = (nextProps: any) => {
+  setProps = (nextProps: Props) => {
     if (!nextProps) {
       return;
     }
@@ -128,7 +123,7 @@ export default class Component {
     return this._element;
   }
 
-  compile(template: any, props?: any) {
+  compile(template: string, props?: Props) {
     const propsAndStubs = { ...props };
 
     if (this._children) {
@@ -138,7 +133,7 @@ export default class Component {
     }
 
     if (this._lists) {
-      Object.entries(this._lists).forEach(([key, _]) => {
+      Object.entries(this._lists).forEach(([key]) => {
         propsAndStubs[key] = `<div data-id="__l_${key}"></div>`;
       });
     }
@@ -162,17 +157,15 @@ export default class Component {
           const listContent = this._createDocumentElement('template');
 
           value.forEach((item) => {
-            if(item instanceof Component) {
+            if (item instanceof Component) {
               listContent.content.append(item.getContent());
             } else {
-              listContent.content.append(`${item}`)
+              listContent.content.append(`${item}`);
             }
           });
           stub.replaceWith(listContent.content);
         }
-
       });
-
     }
 
     return fragment.content;
@@ -180,19 +173,18 @@ export default class Component {
 
   _render() {
     this._removeEvents();
-    this._element.innerHTML = '';
+    if(this._element) {
+      this._element.innerHTML = '';
+    }
+
     const block = this.render();
-    // Этот небезопасный метод для упрощения логики
-    // Используйте шаблонизатор из npm или напишите свой безопасный
-    // Нужно не в строку компилировать (или делать это правильно),
-    // либо сразу в DOM-элементы возвращать из compile DOM-ноду
+
     if (typeof block === 'string') {
       this._element.innerHTML = block;
     } else {
-      if(!!block) {
-        this._element.appendChild(block);
-      }
+      this._element.appendChild(block);
     }
+
     this._addEvents();
   }
 
@@ -200,7 +192,9 @@ export default class Component {
     const { events = {} } = this._props;
 
     Object.keys(events).forEach((eventName) => {
-      this._element.addEventListener(eventName, events[eventName]);
+      if (this._element) {
+        this._element.addEventListener(eventName, events[eventName]);
+      }
     });
   }
 
@@ -208,19 +202,19 @@ export default class Component {
     const { events = {} } = this._props;
 
     Object.keys(events).forEach((eventName) => {
-      this._element.removeEventListener(eventName, events[eventName]);
+      if (this._element) {
+        this._element.removeEventListener(eventName, events[eventName]);
+      }
     });
   }
 
   render() {}
 
   getContent() {
-    return this.element;
+    return this._element;
   }
 
-  _makePropsProxy(props: any) {
-    // Можно и так передать this
-    // Такой способ больше не применяется с приходом ES6+
+  _makePropsProxy(props: Props) {
     const self = this;
 
     return new Proxy(props, {
@@ -242,23 +236,18 @@ export default class Component {
     });
   }
 
-  _createDocumentElement(tagName: any) {
+  _createDocumentElement(tagName: string) {
     // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
     const element = document.createElement(tagName);
-    element.setAttribute('data-id', this._id);
+
+    if (this._id) {
+      element.setAttribute('data-id', this._id);
+    }
 
     if (this._props?.class) {
       element.setAttribute('class', this._props.class);
     }
 
     return element;
-  }
-
-  show() {
-    this.getContent().style.display = 'block';
-  }
-
-  hide() {
-    this.getContent().style.display = 'none';
   }
 }

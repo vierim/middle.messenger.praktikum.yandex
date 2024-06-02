@@ -26,16 +26,19 @@
     &:focus {
       outline: none;
       border-color: $primary-color-hover;
-
+      /* stylelint-disable */
       & ~ .input__label {
         transform: translateY(-24px);
       }
+      /* stylelint-enable */
     }
 
     &:not(:placeholder-shown) {
+      /* stylelint-disable */
       & ~ .input__label {
         transform: translateY(-24px);
       }
+      /* stylelint-enable */
     }
   }
 

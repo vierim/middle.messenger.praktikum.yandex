@@ -1,14 +1,14 @@
 @import './assets/normolize.css';
-@import './variables.scss';
+@import './variables';
 
 @font-face {
-  font-family: 'Inter';
+  font-family: Inter;
   src: url('./static/fonts/Inter-VF.woff2') format('woff2'),
     url('./static/fonts/Inter-VF.ttf') format('truetype');
 }
 
 :root {
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: Inter, Arial, sans-serif;
   font-size: 14px;
 }
 

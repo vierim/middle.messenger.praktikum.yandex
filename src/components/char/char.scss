@@ -1,7 +1,6 @@
 @use '../../variables.scss' as *;
 
 .char {
-
   &__container {
     display: flex;
     justify-content: space-between;
@@ -14,7 +13,7 @@
   }
 
   &__value {
-    color: #999999;
+    color: #999;
     border: none;
     text-align: right;
     width: auto;

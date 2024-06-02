@@ -1,8 +1,9 @@
+import { Props } from '../../core/component/types';
 import { PageComponent } from '../../core/page';
 import { template } from './error-page.tmpl';
 
 class ErrorPageFactory extends PageComponent {
-  constructor(template: string, props?: any) {
+  constructor(template: string, props?: Props) {
     super(template, props);
   }
 }

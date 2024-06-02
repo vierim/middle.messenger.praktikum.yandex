@@ -1,6 +1,16 @@
-export default function renderDOM(selector: any, block: any) {
+import { Component } from "../component";
+
+export default function renderDOM(selector: string, block: Component) {
   const element = document.querySelector(selector);
-  element.appendChild(block.getContent());
+  if(!element) {
+    return;
+  }
+
+  const content = block.getContent();
+
+  if(content) {
+    element.appendChild(content);
+  }
   
   return element;
 }

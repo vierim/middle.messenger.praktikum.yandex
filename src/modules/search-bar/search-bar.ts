@@ -1,9 +1,10 @@
 import Handlebars from 'handlebars';
 import { Component } from '../../core/component';
 import { template } from './search-bar.tmpl';
+import { Props } from '../../core/component/types';
 
 export class SearchBar extends Component {
-  constructor(props?: any) {
+  constructor(props?: Props) {
     super('div', {
       ...props,
       class: 'search-bar',

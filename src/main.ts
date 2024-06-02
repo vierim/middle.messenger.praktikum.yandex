@@ -1,4 +1,5 @@
 import renderDOM from './core/utils/render';
+import { Component } from './core/component';
 import {
   MainPage,
   LoginPage,
@@ -12,7 +13,7 @@ import {
 
 import './index.scss';
 
-let page;
+let page: Component;
 
 switch (window.location.pathname) {
   case '/':

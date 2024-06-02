@@ -1,11 +1,11 @@
 export default class EventBus {
-  listeners: any;
+  listeners: Record<string, Array<() => void>>;
 
   constructor() {
     this.listeners = {};
   }
 
-  on(event: any, callback: any) {
+  on(event: string, callback: () => void) {
     if (!this.listeners[event]) {
       this.listeners[event] = [];
     }
@@ -13,23 +13,23 @@ export default class EventBus {
     this.listeners[event].push(callback);
   }
 
-  off(event: any, callback: any) {
+  off(event: string, callback: () => void) {
 		if (!this.listeners[event]) {
       throw new Error(`Нет события: ${event}`);
     }
 
     this.listeners[event] = this.listeners[event].filter(
-      (listener: any) => listener !== callback
+      (listener) => listener !== callback
     );
   }
 
-	emit(event: any, ...args: any) {
+	emit(event: string, ...args: Array<unknown>) {
     if (!this.listeners[event]) {
       throw new Error(`Нет события: ${event}`);
     }
     
-    this.listeners[event].forEach(function(listener: (arg0: any) => void) {
-      //@ts-ignore
+    this.listeners[event].forEach(function(listener) {
+      //@ts-expect-error Unknown count of rest parameters and its types
       listener(...args);
     });
   }
