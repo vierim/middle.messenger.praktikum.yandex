@@ -1,17 +1,12 @@
-import loginForm from './login-form';
-import registrationForm from './registration-form';
+import SearchBar from './search-bar';
+import ContactsList from './contacts-list';
+import ContactItem from './contacts-list/components/contact-item';
 
-import searchBar from './search-bar';
-import contactsList from './contacts-list';
-import contactItem from './contacts-list/components/contact-item';
-
-import chat from './chat';
+import Chat from './chat';
 
 export {
-  loginForm,
-  registrationForm,
-  searchBar,
-  contactsList,
-  contactItem,
-  chat,
+  SearchBar,
+  ContactsList,
+  ContactItem,
+  Chat,
 };

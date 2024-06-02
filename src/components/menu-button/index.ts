@@ -1,3 +1,3 @@
-import { template } from './menu-button.tmpl';
+import { MenuButton } from './menu-button';
 
-export default template;
+export default MenuButton;

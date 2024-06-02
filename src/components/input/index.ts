@@ -1,3 +1,3 @@
-import { template } from './input.tmpl';
+import Input from './input.ts';
 
-export default template;
+export default Input;

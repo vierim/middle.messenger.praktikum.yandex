@@ -1,3 +1,3 @@
-import { template } from './avatar.tmpl';
+import { Avatar } from './avatar';
 
-export default template;
+export default Avatar;

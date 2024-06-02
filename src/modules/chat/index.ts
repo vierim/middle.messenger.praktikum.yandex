@@ -1,3 +1,3 @@
-import { template } from './chat.tmpl';
+import { Chat } from './chat';
 
-export default template;
+export default Chat;

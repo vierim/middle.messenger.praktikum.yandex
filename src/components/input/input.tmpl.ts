@@ -1,17 +1,26 @@
-import './input.scss';
-
 export const template = `
-  <div class="input">
     <input
-      {{#if error }}
-        class="input__field input__field_error"
-        {{ else }}
-        class="input__field"
-      {{/if}}
+      class="input__field"
       name={{ name }}
       type={{ type }}
       id={{ name }}
       placeholder=" "
+
+      {{#if minLength }}
+        minlength={{ minLength }}
+      {{/if}}
+
+      {{#if maxLength }}
+        maxlength={{ maxLength }}
+      {{/if}}
+
+      {{#if pattern }}
+        pattern={{ pattern }}
+      {{/if}}
+
+      {{#if required }}
+        required
+      {{/if}}
     >
     <label 
       class="input__label"
@@ -20,10 +29,5 @@ export const template = `
       {{ label }}
     </label>
 
-    {{#if error }}
-      <span class="input__error-text">
-        {{ error }}
-      </span>
-    {{/if}}
-  </div>
+    <span class="input__error-text error-message {{ name }}-error"></span>
 `;

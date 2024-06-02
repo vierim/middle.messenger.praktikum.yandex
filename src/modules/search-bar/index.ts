@@ -1,3 +1,3 @@
-import { template } from './search-bar.tmpl';
+import { SearchBar } from './search-bar';
 
-export default template;
+export default SearchBar;

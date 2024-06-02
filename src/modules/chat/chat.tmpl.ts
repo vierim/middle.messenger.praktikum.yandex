@@ -2,7 +2,6 @@ import noAvatarPic from '../../static/images/noavatar.svg';
 import './chat.scss';
 
 export const template = `
-  <div class="chat">
     <div class="chat__header">
       <img 
         class="chat__avatar"
@@ -13,7 +12,7 @@ export const template = `
         Design Destroyer 
       </span>
 
-      {{> menu-button }}
+      {{{ menu-button }}}
     </div>
     <div class="conversation chat__conversation">
     <div class="conversation__date">19 июня</div>
@@ -37,5 +36,4 @@ export const template = `
       >
       <button class="chat__send-btn"></button>
     </div>
-  </div>
 `;

@@ -2,11 +2,6 @@ import noAvatarPic from '../../../../static/images/noavatar.svg';
 import './contact-item.scss';
 
 export const template = `
-  {{#if current }}
-    <div class="contact-item contact-item_current">
-  {{ else }}
-    <div class="contact-item">
-  {{/if}}
     <img 
       class="contact-item__avatar"
       src=${noAvatarPic}
@@ -39,5 +34,4 @@ export const template = `
         {{/if}}
       </div>
     </div>
-  </div>
 `;

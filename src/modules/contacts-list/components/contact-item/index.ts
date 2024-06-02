@@ -1,3 +1,3 @@
-import { template } from './contact-item.tmpl';
+import { ContactsItem } from './contact-item';
 
-export default template;
+export default ContactsItem;

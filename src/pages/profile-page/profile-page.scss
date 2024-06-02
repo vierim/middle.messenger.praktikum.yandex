@@ -1,0 +1,102 @@
+@use '../../variables.scss' as *;
+
+.profile {
+  width: 100%;
+  max-width: 550px;
+  height: 100vh;
+  padding-inline: 20px;
+
+  &__back-btn {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 75px;
+    background-color: #fbfbfb;
+    background-image: url('/arrow-left.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: none;
+    border-right: 1px solid #cecece;
+    transition: background-color 0.3s ease-in-out;
+
+    &:hover {
+      cursor: pointer;
+      background-color: #dcdcdc;
+    }
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 60px;
+  }
+
+  &__name {
+    font-size: 18px;
+    margin: 30px 0 0;
+  }
+
+  &__form {
+    width: 100%;
+    margin: 60px 0 50px;
+  }
+  
+  &__controls-btn {
+    margin-top: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__controls-list {
+    margin: 50px 0 0;
+    list-style: none;
+    padding: 0 0 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__controls-item {
+    border-bottom: 1px solid #eaeaea;
+    box-sizing: border-box;
+    padding: 10px 0;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  &__controls-link {
+    text-decoration: none;
+    color: $primary-color;
+    transition: color 0.3s ease-in-out;
+
+    &:hover {
+      color: $primary-color-hover;
+    }
+
+    &_type {
+      &_exit {
+        color: #ff0000;
+
+        &:hover {
+          color: #d30707;
+        }
+      }
+    }
+  }
+}
+
+.chars-list {
+  width: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &__item:not(:last-of-type) {
+    border-bottom: 1px solid #eaeaea;
+  }
+}

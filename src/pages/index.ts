@@ -1,20 +1,18 @@
-import mainPage from './main';
-
-import loginPage from './login';
-import registrationPage from './registration';
-
-import feedPage from './feed';
-import errorPage from './error';
-
-import profilePage from './profile';
-import editPasswordPage from './edit-password';
+import MainPage from './main-page';
+import LoginPage from './login-page';
+import RegistrationPage from './registration-page';
+import FeedPage from './feed-page';
+import ErrorPage from './error-page';
+import EditPasswordPage from './edit-password-page';
+import { ProfilePage, EditProfilePage } from './profile-page';
 
 export {
-  mainPage,
-  loginPage,
-  registrationPage,
-  feedPage,
-  errorPage,
-  profilePage,
-  editPasswordPage,
+  MainPage,
+  LoginPage,
+  RegistrationPage,
+  FeedPage,
+  ErrorPage,
+  ProfilePage,
+  EditProfilePage,
+  EditPasswordPage,
 };

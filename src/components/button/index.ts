@@ -1,3 +1,3 @@
-import { template } from './button.tmpl';
+import { Button } from './button';
 
-export default template;
+export default Button;

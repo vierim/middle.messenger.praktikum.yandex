@@ -1,6 +1,7 @@
-import button from './button';
-import menuButton from './menu-button';
-import input from './input';
-import avatar from './avatar';
+import Button from './button';
+import MenuButton from './menu-button';
+import Input from './input';
+import Avatar from './avatar';
+import Char from './char';
 
-export { button, menuButton, input, avatar };
+export { Button, MenuButton, Input, Avatar, Char };
