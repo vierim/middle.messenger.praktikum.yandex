@@ -15,9 +15,9 @@ export default class Component {
   private _element: HTMLElement | null = null;
   private _tagName: string = '';
   public _id: string | null = null;
-  private _props: Props;
-  private _children: Children;
-  private _lists: Lists;
+  protected _props: Props;
+  protected _children: Children;
+  protected _lists: Lists;
 
   eventBus: () => EventBus;
 
@@ -123,7 +123,7 @@ export default class Component {
     return this._element;
   }
 
-  compile(template: string, props?: Props) {
+  compile(template: string, props?: Props): DocumentFragment {
     const propsAndStubs = { ...props };
 
     if (this._children) {
@@ -138,14 +138,16 @@ export default class Component {
       });
     }
 
-    const fragment = this._createDocumentElement('template');
+    const fragment = document.createElement('template');
     fragment.innerHTML = Handlebars.compile(template)(propsAndStubs);
 
     if (this._children) {
       Object.values(this._children).forEach((child) => {
         const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
-        if (stub) {
-          stub.replaceWith(child.getContent());
+        const childContent = child.getContent();
+        
+        if (stub && childContent) {
+          stub.replaceWith(childContent);
         }
       });
     }
@@ -154,11 +156,15 @@ export default class Component {
       Object.entries(this._lists).forEach(([key, value]) => {
         const stub = fragment.content.querySelector(`[data-id="__l_${key}"]`);
         if (stub) {
-          const listContent = this._createDocumentElement('template');
+          const listContent = document.createElement('template');
 
           value.forEach((item) => {
             if (item instanceof Component) {
-              listContent.content.append(item.getContent());
+              const itemContent = item.getContent();
+
+              if(itemContent) {
+                listContent.content.append(itemContent);
+              }
             } else {
               listContent.content.append(`${item}`);
             }
@@ -172,17 +178,22 @@ export default class Component {
   }
 
   _render() {
-    this._removeEvents();
-    if(this._element) {
-      this._element.innerHTML = '';
+
+    if(!this._element) {
+      return;
     }
+
+    this._removeEvents();
+    this._element.innerHTML = '';
 
     const block = this.render();
 
     if (typeof block === 'string') {
       this._element.innerHTML = block;
-    } else {
-      this._element.appendChild(block);
+    } 
+
+    if (typeof block === 'object') {
+      this._element.appendChild(block as DocumentFragment);
     }
 
     this._addEvents();
@@ -219,14 +230,12 @@ export default class Component {
 
     return new Proxy(props, {
       get(target, prop) {
-        const value = target[prop];
+        const value = target[prop as string];
         return typeof value === 'function' ? value.bind(target) : value;
       },
       set(target, prop, value) {
-        target[prop] = value;
+        target[prop as string] = value;
 
-        // Запускаем обновление компоненты
-        // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
         self.eventBus().emit(Component.EVENTS.FLOW_CDU, { ...target }, target);
         return true;
       },
@@ -237,14 +246,13 @@ export default class Component {
   }
 
   _createDocumentElement(tagName: string) {
-    // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
     const element = document.createElement(tagName);
 
     if (this._id) {
       element.setAttribute('data-id', this._id);
     }
 
-    if (this._props?.class) {
+    if (typeof this._props?.class === 'string') {
       element.setAttribute('class', this._props.class);
     }
 

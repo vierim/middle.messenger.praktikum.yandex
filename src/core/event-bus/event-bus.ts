@@ -1,5 +1,7 @@
+import { Events } from "./types";
+
 export default class EventBus {
-  listeners: Record<string, Array<() => void>>;
+  listeners: Events;
 
   constructor() {
     this.listeners = {};
@@ -28,7 +30,7 @@ export default class EventBus {
       throw new Error(`Нет события: ${event}`);
     }
     
-    this.listeners[event].forEach(function(listener) {
+    this.listeners[event]?.forEach(function(listener) {
       //@ts-expect-error Unknown count of rest parameters and its types
       listener(...args);
     });

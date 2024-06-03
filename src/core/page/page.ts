@@ -8,12 +8,10 @@ export class PageComponent extends Component {
       class: 'layout',
       pageTemplate: template,
     });
-
-    // console.log({ ...props });
   }
 
   render() {
-    return this.compile(this._props.pageTemplate, {
+    return this.compile(this._props.pageTemplate as string, {
       ...this._children,
       ...this._props,
     });
