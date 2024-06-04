@@ -1,0 +1,42 @@
+@use '../../variables.scss' as *;
+
+.char {
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 10px 0;
+  }
+
+  &__name {
+    font-weight: 550;
+  }
+
+  &__value {
+    color: #999;
+    border: none;
+    text-align: right;
+    width: auto;
+    outline: none;
+  }
+
+  &__error-text {
+    display: flex;
+    justify-content: flex-end;
+    align-items:flex-start;
+  }
+}
+
+.error-message {
+  height: 0;
+  overflow: hidden;
+  color: $danger-color;
+  transition: height 0.2s ease-in-out;
+
+  &_visibility {
+    &_true {
+      height: 25px;
+    }
+  }
+}
+
