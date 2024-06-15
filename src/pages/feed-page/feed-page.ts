@@ -1,20 +1,27 @@
 import { PageComponent } from '../../core/page';
+import { Props } from '../../core/component/types';
+import Link from '../../core/router/components/link';
+
 import { ContactsList, SearchBar, Chat, ContactItem } from '../../modules';
 
-import { contacts } from './mock-data';
 import { template } from './feed-page.tmpl';
-import { Props } from '../../core/component/types';
 
-class FeedPageFactory extends PageComponent {
-  constructor(template: string, props?: Props) {
-    super(template, props);
+import { contacts } from './mock-data';
+
+export class FeedPage extends PageComponent {
+  constructor(props?: Props) {
+    super(template, {
+      ...props,
+      profilePageLink: new Link({
+        anchor: 'Профиль',
+        href: '/profile',
+        class: 'feed__nav-link',
+      }),
+      searchBar: new SearchBar(),
+      contactsList: new ContactsList({
+        items: contacts.map((item) => new ContactItem(item)),
+      }),
+      chat: new Chat(),
+    });
   }
 }
-
-export const FeedPage = new FeedPageFactory(template, {
-  searchBar: new SearchBar(),
-  contactsList: new ContactsList({
-    items: contacts.map((item) => new ContactItem(item)),
-  }),
-  chat: new Chat(),
-});

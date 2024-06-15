@@ -1,44 +1,29 @@
-import renderDOM from './core/utils/render';
-import { Component } from './core/component';
+import { Router } from './core/router';
+import renderDOM from './core/utils/render/render';
+
 import {
   MainPage,
   LoginPage,
-  ErrorPage,
   RegistrationPage,
-  ProfilePage,
   FeedPage,
-  EditPasswordPage,
+  ProfilePage,
   EditProfilePage,
+  EditPasswordPage,
+  ErrorPage,
 } from './pages';
 
 import './index.scss';
 
-let page: Component;
+const rootElement = document.querySelector('#app');
+export const router = new Router(rootElement, renderDOM);
 
-switch (window.location.pathname) {
-  case '/':
-    page = MainPage;
-    break;
-  case '/login':
-    page = LoginPage;
-    break;
-  case '/registration':
-    page = RegistrationPage;
-    break;
-  case '/feed':
-    page = FeedPage;
-    break;
-  case '/profile':
-    page = ProfilePage;
-    break;
-  case '/edit':
-    page = EditProfilePage;
-    break;
-  case '/password':
-    page = EditPasswordPage;
-    break;
-  default:
-    page = ErrorPage;
-}
-
-renderDOM('#app', page);
+router
+  .setErrorInstance(ErrorPage)
+  .push({ url: '/', component: MainPage })
+  .push({ url: '/login', component: LoginPage })
+  .push({ url: '/registration', component: RegistrationPage })
+  .push({ url: '/feed', component: FeedPage })
+  .push({ url: '/profile', component: ProfilePage })
+  .push({ url: '/edit', component: EditProfilePage })
+  .push({ url: '/password', component: EditPasswordPage })
+  .start();

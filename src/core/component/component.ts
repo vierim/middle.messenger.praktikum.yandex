@@ -256,6 +256,10 @@ export default class Component {
       element.setAttribute('class', this._props.class);
     }
 
+    if (typeof this._props?.href === 'string') {
+      element.setAttribute('href', this._props.href);
+    }
+
     return element;
   }
 }

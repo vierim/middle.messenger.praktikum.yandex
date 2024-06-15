@@ -1,6 +1,7 @@
 export const template = `
   <div class="profile">
-    <button class="profile__back-btn"></button>
+    {{{ backButton }}}
+
     <div class="profile__container">
       {{{ avatar }}}
 

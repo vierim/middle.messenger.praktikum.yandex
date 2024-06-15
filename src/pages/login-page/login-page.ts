@@ -3,9 +3,11 @@ import {
   handleFieldValidity,
   handleFormSubmit,
 } from '../../core/helpers/forms';
+import Link from '../../core/router/components/link';
+import type { Props } from '../../core/component/types';
+
 import { Input, Button } from '../../components';
 import { template } from './login-page.tmpl';
-import { Props } from '../../core/component/types';
 
 const login = new Input({
   label: 'Логин',
@@ -38,20 +40,24 @@ const button = new Button({
   type: 'submit',
 });
 
-class LoginPageFactory extends PageComponent {
-  constructor(template: string, props?: Props) {
+const registrationPageLink = new Link({
+  anchor: 'Нет аккаунта?',
+  href: '/registration',
+  class: 'login-form__link',
+});
+
+export class LoginPage extends PageComponent {
+  constructor(props?: Props) {
     super(template, {
       ...props,
       login,
       password,
       button,
+      registrationPageLink,
+      headline: 'Вход',
+      events: {
+        submit: handleFormSubmit,
+      },
     });
   }
 }
-
-export const LoginPage = new LoginPageFactory(template, {
-  headline: 'Вход',
-  events: {
-    submit: handleFormSubmit,
-  },
-});

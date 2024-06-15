@@ -4,7 +4,10 @@ import {
   handleFormSubmit,
 } from '../../core/helpers/forms';
 import { Props } from '../../core/component/types';
+import Link from '../../core/router/components/link';
+
 import { Input, Button } from '../../components';
+
 import { template } from './registration-page.tmpl';
 
 const registrationForm = {
@@ -92,19 +95,23 @@ const button = new Button({
   text: 'Зарегистрироваться',
 });
 
-class RegistrationPageFactory extends PageComponent {
-  constructor(template: string, props?: Props) {
+const loginPageLink = new Link({
+  anchor: 'Войти',
+  href: '/login',
+  class: 'registration-form__link',
+});
+
+export class RegistrationPage extends PageComponent {
+  constructor(props?: Props) {
     super(template, {
       ...props,
       ...registrationForm,
       button,
+      loginPageLink,
+      headline: 'Регистрация',
+      events: {
+        submit: handleFormSubmit,
+      },
     });
   }
 }
-
-export const RegistrationPage = new RegistrationPageFactory(template, {
-  headline: 'Регистрация',
-  events: {
-    submit: handleFormSubmit,
-  },
-});

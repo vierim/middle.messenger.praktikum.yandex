@@ -1,4 +1,4 @@
-import './profile-page.scss';
+import './edit-profile-page.scss';
 
 export const template = `
   <div class="profile">
@@ -7,8 +7,6 @@ export const template = `
     <div class="profile__container">
       {{{ avatar }}}
       
-      <h1 class="profile__name">{{ userName }}</h1>
-
       <form name="profile-form" class="profile__form" novalidate>
         <ul class="chars-list">
           <li class="chars-list__item">
@@ -36,17 +34,9 @@ export const template = `
           </li>
         </ul>
 
-        <ul class="profile__controls-list">
-          <li class="profile__controls-item">
-            {{{ editProfilePageLink }}}
-          </li>
-          <li class="profile__controls-item">
-            {{{ editPasswordPageLink }}}
-          </li>
-          <li class="profile__controls-item">
-            {{{ logoutLink }}}
-          </li>
-        </ul>
+        <div class="profile__controls-btn">
+          {{{ button }}}
+        </div>
 
       </form>
     </div>

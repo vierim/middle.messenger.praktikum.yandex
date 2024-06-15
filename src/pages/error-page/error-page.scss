@@ -17,17 +17,17 @@
     margin: 0 0 70px;
   }
 
-  &__link {
+  &__back-button {
     font-size: 14px;
     line-height: 1;
     color: $primary-color;
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: color 0.3s linear, border-color 0.2s linear;
+    background-color: transparent;
+    border: none;
+    transition: color 0.3s linear;
 
     &:hover {
+      cursor: pointer;
       color: $primary-color-hover;
-      border-color: $primary-color-hover;
     }
   }
 }
