@@ -3,8 +3,12 @@ import { Events } from "./types";
 export default class EventBus {
   listeners: Events;
 
-  constructor() {
+  constructor(defaultListener?: string) {
     this.listeners = {};
+
+    if(defaultListener) {
+      this.listeners[defaultListener] = [];
+    }
   }
 
   on(event: string, callback: () => void) {
@@ -17,7 +21,8 @@ export default class EventBus {
 
   off(event: string, callback: () => void) {
 		if (!this.listeners[event]) {
-      throw new Error(`Нет события: ${event}`);
+      console.log(`Событие ${event} не зарегистрировано`);
+      return;
     }
 
     this.listeners[event] = this.listeners[event].filter(
@@ -27,7 +32,8 @@ export default class EventBus {
 
 	emit(event: string, ...args: Array<unknown>) {
     if (!this.listeners[event]) {
-      throw new Error(`Нет события: ${event}`);
+      console.log(`Событие ${event} не зарегистрировано`);
+      return;
     }
     
     this.listeners[event]?.forEach(function(listener) {
