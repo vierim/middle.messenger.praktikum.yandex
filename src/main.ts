@@ -1,8 +1,11 @@
-import { Router } from './core/router';
-import renderDOM from './core/utils/render/render';
+import Router from './core/router';
+import renderDOM from './core/utils/render';
+import store from './services/store';
+
+import AuthAPI from './api/auth-api';
+import HttpRequest from './core/http-request';
 
 import {
-  MainPage,
   LoginPage,
   RegistrationPage,
   FeedPage,
@@ -14,16 +17,60 @@ import {
 
 import './index.scss';
 
-const rootElement = document.querySelector('#app');
-export const router = new Router(rootElement, renderDOM);
+const rootSelector = '#app';
+const rootElement = document.querySelector(rootSelector) as Element;
+
+if (!rootElement) {
+  throw new Error(`Root element ${rootSelector} wasn't found`);
+}
+
+try {
+  const auth = new AuthAPI(HttpRequest);
+  const usetData = await auth.getUserData();
+
+  store.set('isAuth', true);
+  store.set('user', usetData);
+} catch (error: unknown) {
+  if (error instanceof Error) {
+    console.log(error.message);
+  }
+}
+
+export const router = new Router(rootElement, renderDOM, ErrorPage, {
+  defaultAuthPage: '/messenger',
+  defaultAnonymousPage: '/',
+});
 
 router
-  .setErrorInstance(ErrorPage)
-  .push({ url: '/', component: MainPage })
-  .push({ url: '/login', component: LoginPage })
-  .push({ url: '/registration', component: RegistrationPage })
-  .push({ url: '/feed', component: FeedPage })
-  .push({ url: '/profile', component: ProfilePage })
-  .push({ url: '/edit', component: EditProfilePage })
-  .push({ url: '/password', component: EditPasswordPage })
-  .start();
+  .push({
+    url: '/',
+    component: LoginPage,
+    config: { anonymousOnly: true },
+  })
+  .push({
+    url: '/sign-up',
+    component: RegistrationPage,
+    config: { anonymousOnly: true },
+  })
+  .push({
+    url: '/messenger',
+    component: FeedPage,
+    config: { authOnly: true },
+  })
+  .push({
+    url: '/settings',
+    component: ProfilePage,
+    config: { authOnly: true },
+  })
+  .push({
+    url: '/settings/edit-profile',
+    component: EditProfilePage,
+    config: { authOnly: true },
+  })
+  .push({
+    url: '/settings/edit-password',
+    component: EditPasswordPage,
+    config: { authOnly: true },
+  });
+
+router.start();
