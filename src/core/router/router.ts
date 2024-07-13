@@ -1,80 +1,109 @@
-import { RenderEngine } from '../utils/render';
-import { Route } from './types';
+import store from '../../services/store';
+import { Component } from '../component';
+import type { Route, RenderEngine, RouterConfig } from './types';
 
-export default class Router {
+class Router {
   private static __instance: Router;
-  private _routes: Array<Route> = [];
-  private _renderEngine: RenderEngine<Element> | undefined;
-  _rootElement: Element | null = null;
-  _history = window.history;
-  _errorPageComponent: any = null;
 
-  constructor(rootElement: Element | null, renderDOM: RenderEngine<Element>) {
+  private routes: Array<Route> = [];
+  private renderEngine!: RenderEngine<Element>;
+  private rootElement!: Element;
+  private errorPageComponent!: Component;
+
+  private defaultAuthPage: string = '';
+  private defaultAnonymousPage: string = '';
+
+  private history: History = window.history;
+
+  constructor(
+    rootElement: Element,
+    renderEngine: RenderEngine<Element>,
+    errorPageComponent: { new (): Component },
+    config?: RouterConfig,
+  ) {
     if (Router.__instance) {
       return Router.__instance;
     }
 
-    this._rootElement = rootElement;
-    this._renderEngine = renderDOM;
-    
-    Router.__instance = this;
-  }
+    this.rootElement = rootElement;
+    this.renderEngine = renderEngine;
+    this.errorPageComponent = new errorPageComponent();
 
-  setErrorInstance(component: any) {
-    this._errorPageComponent = component;
-    return this;
+    if (config?.defaultAuthPage) {
+      this.defaultAuthPage = config?.defaultAuthPage;
+    }
+
+    if (config?.defaultAnonymousPage) {
+      this.defaultAnonymousPage = config?.defaultAnonymousPage;
+    }
+
+    Router.__instance = this;
   }
 
   push(route: Route) {
     const { url } = route;
 
     if (this.hasRouteFor(url)) {
-      console.error(`Url '${url}' is already exist`);
+      console.log(`Url '${url}' is already exist`);
     } else {
-      this._routes.push(route);
+      this.routes.push(route);
     }
 
     return this;
   }
 
-  private hasRouteFor(url: string): boolean {
-    return this._routes.some((routeItem) => routeItem.url === url);
-  }
-
   start() {
     window.addEventListener('popstate', () => {
-      this._setRoute(document.location.pathname);
+      this.setRoute(document.location.pathname);
     });
 
     const { pathname } = document.location;
-    this._setRoute(pathname);
-  }
-
-  _setRoute(url: string) {
-    const route = this._getRoute(url);
-
-    const component =
-      route && this._errorPageComponent
-        ? new route.component()
-        : new this._errorPageComponent();
-
-    if(this._renderEngine && this._rootElement) {
-      this._renderEngine(this._rootElement, component);
-    } else {
-      console.error('No render engine available');
-    }
-  }
-
-  _getRoute(url: string) {
-    return this._routes.find((route) => route.url === url);
+    this.setRoute(pathname);
   }
 
   navigate(url: string) {
-    this._history.pushState({}, '', url);
-    this._setRoute(url);
+    console.log(`navigate to ${url}`);
+    this.history.pushState({}, '', url);
+    this.setRoute(url);
   }
 
   back() {
-    this._history.go(-1);
+    this.history.go(-1);
+  }
+
+  private hasRouteFor(url: string): boolean {
+    return this.routes.some((route) => route.url === url);
+  }
+
+  private setRoute(url: string) {
+    if (!this.renderEngine) {
+      throw new Error('Unavailable RenderEngine');
+    }
+
+    if (!this.rootElement) {
+      throw new Error('Unavailable root html element');
+    }
+
+    const route = this.getRoute(url);
+    const { isAuth } = store.get();
+
+    if (route && route.config?.authOnly && !isAuth) {
+      this.navigate(this.defaultAnonymousPage);
+      return;
+    }
+
+    if (route && route.config?.anonymousOnly && isAuth) {
+      this.navigate(this.defaultAuthPage);
+      return;
+    }
+
+    const component = route ? new route.component() : this.errorPageComponent;
+    this.renderEngine(this.rootElement, component);
+  }
+
+  private getRoute(url: string) {
+    return this.routes.find((route) => route.url === url);
   }
 }
+
+export default Router;

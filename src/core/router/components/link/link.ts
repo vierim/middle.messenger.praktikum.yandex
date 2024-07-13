@@ -7,18 +7,19 @@ import { router } from '../../../../main';
 
 import { template } from './link.tmpl';
 
-export default class Link extends Component {
+class Link extends Component {
   constructor(props: Props) {
     super('a', {
       ...props,
-      events: {
-        click: (evt: Event) => {
-          evt.preventDefault();
 
-          const target = evt.target as HTMLAnchorElement;
-          router.navigate(target.pathname);
+      events: {
+        click: (event: Event) => {
+          event.preventDefault();
+
+          const { pathname } = event.target as HTMLAnchorElement;
+          router.navigate(pathname);
         },
-      }
+      },
     });
   }
 
@@ -26,3 +27,5 @@ export default class Link extends Component {
     return Handlebars.compile(template)({ ...this._props });
   }
 }
+
+export default Link;
