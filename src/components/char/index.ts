@@ -1,3 +1,3 @@
-import { Char } from './char';
+import Char from './char';
 
 export default Char;

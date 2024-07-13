@@ -1,9 +1,14 @@
 import Handlebars from 'handlebars';
+
 import { Component } from '../../core/component';
-import { template } from './char.tmpl';
 import { Props } from '../../core/component/types';
 
-export class Char extends Component {
+import { connect } from '../../core/store';
+import store, { AppState } from '../../services/store';
+
+import { template } from './char.tmpl';
+
+class Char extends Component {
   constructor(props: Props) {
     super('div', { ...props, class: 'char' });
   }
@@ -15,3 +20,9 @@ export class Char extends Component {
     return result;
   }
 }
+
+function mapStateToProps(state: AppState) {
+  return { user: state.user, value: state.user.email }
+}
+
+export default connect(store, Char, mapStateToProps);
