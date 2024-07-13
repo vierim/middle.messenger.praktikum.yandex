@@ -10,6 +10,8 @@ const renderDOM: RenderEngine<Element> = (element, block) => {
   if(content) {
     element.innerHTML = '';
     element.appendChild(content);
+
+    block.dispatchComponentDidMount();
   }
   
   return element;
