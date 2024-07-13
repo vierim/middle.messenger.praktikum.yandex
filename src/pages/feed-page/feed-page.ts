@@ -1,6 +1,6 @@
 import { PageComponent } from '../../core/page';
 import { Props } from '../../core/component/types';
-import Link from '../../core/router/components/link';
+import { Link } from '../../core/router';
 
 import { ContactsList, SearchBar, Chat, ContactItem } from '../../modules';
 
@@ -14,7 +14,7 @@ export class FeedPage extends PageComponent {
       ...props,
       profilePageLink: new Link({
         anchor: 'Профиль',
-        href: '/profile',
+        href: '/settings',
         class: 'feed__nav-link',
       }),
       searchBar: new SearchBar(),
