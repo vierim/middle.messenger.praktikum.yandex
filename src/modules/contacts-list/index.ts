@@ -1,3 +1,3 @@
-import { ContactsList } from './contacts-list';
+import ContactsList from './contacts-list';
 
 export default ContactsList;

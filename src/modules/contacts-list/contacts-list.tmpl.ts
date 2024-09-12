@@ -1,5 +1,7 @@
 import './contacts-list.scss';
 
 export const template = `
-  {{{ items }}}
+  <ul class="contacts__list">
+    {{{ items }}}
+  </ul>
 `;

@@ -5,33 +5,18 @@ export const template = `
     <img 
       class="contact-item__avatar"
       src=${noAvatarPic}
-      alt="{{ name }}"
+      alt="{{ title }}"
     >
     <div class="contact-item__content">
 
       <div class="contact-item__info">
         <span class="contact-item__name">
-          {{ name }}
-        </span>
-        <span class="contact-item__date-time">
-          {{ lastMessage.time }}
+          {{ title }} {{ id }}
         </span>
       </div>
 
-      <div class="contact-item__message">
-        <p class="contact-item__text">
-          {{#if lastMessage.outgoing }}
-            <span class="contact-item__sender-mark">Вы: </span>
-          {{/if}}
-          
-          {{ lastMessage.content }}
-        </p>
-        
-        {{#if unread }}
-          <span class="contact-item__unread-counter">
-            {{ unread }}
-          </span>
-        {{/if}}
-      </div>
+      {{#if isActive}}
+        Current
+      {{/if}}
     </div>
 `;

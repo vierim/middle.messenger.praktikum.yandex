@@ -1,3 +1,3 @@
-import { ContactsItem } from './contact-item';
+import ContactsItem from './contact-item';
 
 export default ContactsItem;

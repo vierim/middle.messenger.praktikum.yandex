@@ -1,22 +1,36 @@
 import Handlebars from 'handlebars';
-import { Component } from '../../../../core/component';
-import { template } from './contact-item.tmpl';
-import { Props } from '../../../../core/component/types';
+import Component, { Props } from '../../../../core/component';
 
-export class ContactsItem extends Component {
+import ChatApi from '../../../../api/chat-api';
+import store from '../../../../services/store';
+
+import { template } from './contact-item.tmpl';
+
+class ContactsItem extends Component {
+  
   constructor(props?: Props) {
-    super('div', {
+    super('li', {
       ...props,
       class: 'contact-item',
+      events: {
+        click: () => handleClick(props?.id),
+      },
     });
-
-    
   }
 
   render() {
-    const compiledInput = Handlebars.compile(template);
-    const result = compiledInput({ ...this._props });
-
-    return result;
+    return Handlebars.compile(template)({ ...this._props });
   }
+}
+
+export default ContactsItem;
+
+async function handleClick(chatId: number) {
+  const chatsService = new ChatApi();
+  const data = await chatsService.getChatTokenRequest(chatId);
+
+  store.set('activeChat', {
+    ...store.get().chats.filter((item) => item.id === chatId)[0],
+    token: data.token,
+  });
 }
