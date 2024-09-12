@@ -1,0 +1,47 @@
+
+
+.message-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+
+  &__attach-btn {
+    width: 32px;
+    height: 32px;
+    background-color: transparent;
+    background-image: url('/attach-icon.svg');
+    border: none;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__input {
+    flex-grow: 1;
+    height: 32px;
+    border-radius: 30px;
+    background-color: #efefef;
+    border: none;
+    font-size: 14px;
+    padding: 0 20px;
+
+    &::placeholder {
+      color: #999;
+    }
+  }
+
+  &__send-btn {
+    width: 28px;
+    height: 28px;
+    background-color: transparent;
+    border: none;
+    background-image: url('/arrow-left.svg');
+    transform: rotate(180deg);
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
