@@ -7,7 +7,7 @@ export const template = `
     <div class="profile__container">
       {{{ avatar }}}
       
-      <h1 class="profile__name">{{ userName }}</h1>
+      <h1 class="profile__name">{{ user.first_name }}</h1>
 
       <form name="profile-form" class="profile__form" novalidate>
         <ul class="chars-list">
@@ -44,7 +44,7 @@ export const template = `
             {{{ editPasswordPageLink }}}
           </li>
           <li class="profile__controls-item">
-            {{{ logoutLink }}}
+            {{{ logoutButton }}}
           </li>
         </ul>
 
