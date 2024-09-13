@@ -1,14 +1,16 @@
 import store from '../../services/store';
-import { Component } from '../component';
-import type { Route, RenderEngine, RouterConfig } from './types';
+import Component from '../component';
+
+import type { Route, RenderEngine, RouterConfig } from './interface';
 
 class Router {
   private static __instance: Router;
 
   private routes: Array<Route> = [];
+
   private renderEngine!: RenderEngine<Element>;
   private rootElement!: Element;
-  private errorPageComponent!: Component;
+  private errorRouteComponent?: Component;
 
   private defaultAuthPage: string = '';
   private defaultAnonymousPage: string = '';
@@ -18,7 +20,6 @@ class Router {
   constructor(
     rootElement: Element,
     renderEngine: RenderEngine<Element>,
-    errorPageComponent: { new (): Component },
     config?: RouterConfig,
   ) {
     if (Router.__instance) {
@@ -27,7 +28,6 @@ class Router {
 
     this.rootElement = rootElement;
     this.renderEngine = renderEngine;
-    this.errorPageComponent = new errorPageComponent();
 
     if (config?.defaultAuthPage) {
       this.defaultAuthPage = config?.defaultAuthPage;
@@ -48,6 +48,12 @@ class Router {
     } else {
       this.routes.push(route);
     }
+
+    return this;
+  }
+
+  setErrorRoute(errorRouteComponent: { new (): Component }) {
+    this.errorRouteComponent = new errorRouteComponent;
 
     return this;
   }
@@ -97,8 +103,10 @@ class Router {
       return;
     }
 
-    const component = route ? new route.component() : this.errorPageComponent;
-    this.renderEngine(this.rootElement, component);
+    const component = route ? new route.component() : this.errorRouteComponent;
+    if(component) {
+      this.renderEngine(this.rootElement, component);
+    }
   }
 
   private getRoute(url: string) {
