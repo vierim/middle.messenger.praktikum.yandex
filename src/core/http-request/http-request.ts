@@ -1,4 +1,6 @@
-class HttpRequest {
+import { RequestEngine } from "./interface";
+
+class HttpRequest implements RequestEngine {
   private _baseUrl: string = '';
 
   constructor(url: string) {
@@ -32,6 +34,24 @@ class HttpRequest {
       headers: {
         'Content-Type': 'application/json',
       },
+      body: data ? JSON.stringify(data) : undefined,
+    });
+
+    if (!res.ok) {
+      return Promise.reject(res);
+    }
+
+    return res;
+  }
+
+  async put(endPointUrl: string, data: Record<string, unknown>) {
+    const res = await fetch(this._getRequestUrl(endPointUrl), {
+      method: 'put',
+      credentials: 'include',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(data),
     });
 
@@ -42,9 +62,20 @@ class HttpRequest {
     return res;
   }
 
-  put() {}
+  async putFormData(endPointUrl: string, data: FormData) {
+    const res = await fetch(this._getRequestUrl(endPointUrl), {
+      method: 'put',
+      credentials: 'include',
+      mode: 'cors',
+      body: data,
+    });
 
-  delete() {}
+    if (!res.ok) {
+      return Promise.reject(res);
+    }
+
+    return res;
+  }
 }
 
 export default HttpRequest;
