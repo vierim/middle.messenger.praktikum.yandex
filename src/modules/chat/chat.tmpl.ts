@@ -2,6 +2,8 @@ import noAvatarPic from '../../static/images/noavatar.svg';
 import './chat.scss';
 
 export const template = `
+  {{#if current}}
+  
     <div class="chat__header">
       <img 
         class="chat__avatar"
@@ -27,13 +29,14 @@ export const template = `
       </li>
     </ul>
     </div>
-    <div class="chat__message">
-      <button class="chat__attach-btn"></button>
-      <input
-        class="chat__message-text"
-        name="message"
-        placeholder="Сообщение"
-      >
-      <button class="chat__send-btn"></button>
+
+    {{{ messageForm }}}
+
+  {{else}}
+
+    <div class="chat__greeting">
+      <p>Выберите чат чтобы отправить сообщение</p>
     </div>
+
+  {{/if}}  
 `;
