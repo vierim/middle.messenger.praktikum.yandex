@@ -1,18 +1,28 @@
 import Store from './store';
-import { Component, Props } from '../component';
-import type { MapStateToProps } from './type';
+import Component, { Props } from '../component';
+
+import { isEqual } from '../utils';
+
+import type { MapStateToProps } from './interface';
 
 export default function connect<T extends Record<string, unknown>>(
   store: Store<T>,
-  component: new (props: Props) => Component,
+  component: new (props?: Props) => Component,
   mapStateToProps: MapStateToProps<T>
 ) {
   return class extends component {
     constructor(props = {}) {
-      super({ ...props, ...mapStateToProps(store.get()) });
+      let localState = mapStateToProps(store.get());
+
+      super({ ...props, ...localState });
 
       store.subscribe(() => {
-        this.setProps({ ...mapStateToProps(store.get()) });
+        const updatedState = mapStateToProps(store.get());
+
+        if(!isEqual(localState, updatedState)) {
+          this.setProps({ ...updatedState });
+          localState = updatedState;
+        }
       });
     }
   };
