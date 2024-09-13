@@ -1,5 +1,6 @@
 import { EventBus } from '../event-bus';
-import { StoreEvents } from './type';
+import { setObjectValue } from '../utils';
+import { StoreEvents } from './interface';
 
 export default class Store<T extends Record<string, unknown>> {
   private _state!: T;
@@ -36,13 +37,16 @@ export default class Store<T extends Record<string, unknown>> {
   }
 
   private _setState(path: string, payload: unknown) {
-    console.log({ state: { ...this._state }, path, payload });
-    console.log('ATTENTION: usefull _setState() method does not ready!!!');
+    console.log('_setState() method');
+    console.log({ path, payload });
+    console.log('State before update');
+    console.log({ ...this._state });
     
     if(this._state) {
-      this._state[path] = payload;
+      setObjectValue(this._state, path, payload);
     }
 
-    console.log({ state: { ...this._state }, path, payload });
+    console.log('State after update');
+    console.log({ ...this._state });
   }
 }
