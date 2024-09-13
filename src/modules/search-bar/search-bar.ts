@@ -1,9 +1,10 @@
 import Handlebars from 'handlebars';
-import { Component } from '../../core/component';
+import Component, { Props } from '../../core/component';
+
 import { template } from './search-bar.tmpl';
-import { Props } from '../../core/component/types';
 
 export class SearchBar extends Component {
+  
   constructor(props?: Props) {
     super('div', {
       ...props,
@@ -12,9 +13,6 @@ export class SearchBar extends Component {
   }
 
   render() {
-    const compiledInput = Handlebars.compile(template);
-    const result = compiledInput({ ...this._props });
-
-    return result;
+    return Handlebars.compile(template)({ ...this._props });
   }
 }

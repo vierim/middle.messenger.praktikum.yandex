@@ -1,15 +1,18 @@
-import { Component } from '../../core/component';
-import { Props } from '../../core/component/types';
+import Handlebars from 'handlebars';
+import Component, { Props } from '../../core/component';
+
 import { template } from './button.tmpl';
 
 export class Button extends Component {
-  constructor(props?: Props) {
-    super('button', { ...props, class: 'btn' });
+
+  constructor(props: Props) {
+    super('button', {
+      ...props,
+      class: props.class ?? 'btn',
+    });
   }
 
   render() {
-    return this.compile(template, { 
-      text: this._props.text,
-    });
+    return Handlebars.compile(template)({ ...this._props });
   }
 }
