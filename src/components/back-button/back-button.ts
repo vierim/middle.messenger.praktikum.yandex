@@ -1,18 +1,23 @@
 import Handlebars from 'handlebars';
 
-import { Component } from '../../core/component';
-import { Props } from '../../core/component/types';
+import Component, { Props } from '../../core/component';
 
-import { router } from '../../main';
+import router from '../../services/router';
 
 import { template } from './back-button.tmpl';
 
 export class BackButton extends Component {
-  constructor(props?: Props) {
+  constructor(props: Props) {
     super('button', { 
       ...props,
       events: {
-        click: () => router.back(),
+        click: () => {
+          if(props?.url) {
+            router.navigate(props.url);
+          } else {
+            router.back();
+          }
+        },
       }
     });
   }

@@ -1,9 +1,7 @@
-import Router from './core/router';
-import renderDOM from './core/utils/render';
-import store from './services/store';
+import AuthAPI from './api/auth';
 
-import AuthAPI from './api/auth-api';
-import HttpRequest from './core/http-request';
+import store from './services/store';
+import router from './services/router';
 
 import {
   LoginPage,
@@ -17,29 +15,21 @@ import {
 
 import './index.scss';
 
-const rootSelector = '#app';
-const rootElement = document.querySelector(rootSelector) as Element;
-
-if (!rootElement) {
-  throw new Error(`Root element ${rootSelector} wasn't found`);
-}
-
 try {
-  const auth = new AuthAPI(HttpRequest);
-  const usetData = await auth.getUserData();
+  const auth = new AuthAPI();
+  const userData = await auth.getUserInfo();
 
   store.set('isAuth', true);
-  store.set('user', usetData);
+  store.set('user', userData);
 } catch (error: unknown) {
   if (error instanceof Error) {
-    console.log(error.message);
+    console.error(error.message);
+  } else {
+    console.log(error);
   }
 }
 
-export const router = new Router(rootElement, renderDOM, ErrorPage, {
-  defaultAuthPage: '/messenger',
-  defaultAnonymousPage: '/',
-});
+router.setErrorRoute(ErrorPage);
 
 router
   .push({

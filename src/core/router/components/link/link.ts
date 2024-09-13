@@ -1,9 +1,8 @@
 import Handlebars from 'handlebars';
 
-import { Component } from '../../../component';
-import { Props } from '../../../component/types';
+import Component, { Props } from '../../../component';
 
-import { router } from '../../../../main';
+import router from '../../../../services/router';
 
 import { template } from './link.tmpl';
 
