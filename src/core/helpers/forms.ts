@@ -1,3 +1,5 @@
+import Validator from '../validator';
+
 export function handleFormSubmit(event: Event) {
   event.preventDefault();
 
@@ -21,22 +23,29 @@ export function handleFormSubmit(event: Event) {
   }
 }
 
-export function handleFieldValidity(event: Event) {
-  const element = event.target as HTMLInputElement;
-
-  if(!element) {
+export function fieldValidity(element: HTMLInputElement) {
+  if (!element) {
     return;
   }
 
-  enableFieldValidation(element);
+  const FieldValidator = new Validator(element);
+  const { isValid, reason } = FieldValidator.valid();
+
+  if (!isValid) {
+    showErrorMessage(element, reason);
+  } else {
+    hideErrorMessage(element);
+  }
+
+  return { isValid, reason };
 }
 
 export function enableFieldValidation(element: HTMLInputElement) {
-  if(!element) {
+  if (!element) {
     return;
   }
 
-  if(!element.validity.valid) {
+  if (!element.validity.valid) {
     const errorMessage = composeErrorMessage(element);
 
     showErrorMessage(element, errorMessage);
@@ -46,7 +55,6 @@ export function enableFieldValidation(element: HTMLInputElement) {
 }
 
 function composeErrorMessage(element: HTMLInputElement) {
-
   const validityState = element.validity;
   let errorMessage = '';
 
@@ -67,11 +75,14 @@ function composeErrorMessage(element: HTMLInputElement) {
       errorMessage = `Введите корректное значение`;
     }
   }
-  
+
   return errorMessage;
 }
 
-function showErrorMessage(inputElement: HTMLElement, errorMessage: string = '') {
+function showErrorMessage(
+  inputElement: HTMLElement,
+  errorMessage: string = ''
+) {
   if (!inputElement || errorMessage.length === 0) {
     return;
   }
