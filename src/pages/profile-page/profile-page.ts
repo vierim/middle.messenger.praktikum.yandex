@@ -1,71 +1,123 @@
-import { PageComponent } from '../../core/page';
-import { Props } from '../../core/component/types';
-import Link from '../../core/router/components/link';
+import Component from '../../core/component';
+import { Link } from '../../core/router';
+import { connect } from '../../core/store';
 
-import { Avatar, BackButton, Char } from '../../components';
+import store, { AppState } from '../../services/store';
+import { authController } from '../../controllers';
+
+import { Avatar, BackButton, Button, Char } from '../../components';
+
+import type { ProfilePageProps } from './interface';
 
 import { template } from './profile-page.tmpl';
 
-export class ProfilePage extends PageComponent {
-  constructor(props?: Props) {
-    super(template, {
+class ProfilePage extends Component {
+  constructor(props?: ProfilePageProps) {
+    super('main', {
       ...props,
+      class: 'layout',
+
       avatar: new Avatar({
-        changeable: false,
+        changeable: true,
       }),
-      backButton: new BackButton({ class: 'profile__back-btn' }),
-      userName: 'Иван',
+      backButton: new BackButton({
+        class: 'profile__back-btn',
+        url: '/messenger',
+      }),
+
       email: new Char({
         label: 'Почта',
         type: 'email',
         name: 'email',
-        value: 'pochta@yandex.ru',
+        value: '',
       }),
       login: new Char({
         label: 'Логин',
         type: 'text',
         name: 'login',
-        value: 'ivanivanov',
+        value: '',
       }),
       name: new Char({
         label: 'Имя',
         type: 'text',
         name: 'first_name',
-        value: 'Иван',
+        value: '',
       }),
       secondName: new Char({
         label: 'Фамилия',
         type: 'text',
         name: 'second_name',
-        value: 'Иванов',
+        value: '',
       }),
       nick: new Char({
         label: 'Имя в чате',
         type: 'text',
         name: 'display_name',
-        value: 'Иван',
+        value: '',
       }),
       phone: new Char({
         label: 'Телефон',
         type: 'tel',
         name: 'phone',
-        value: '+79099673030',
+        value: '',
       }),
+
       editProfilePageLink: new Link({
         anchor: 'Изменить данные',
-        href: '/edit',
+        href: '/settings/edit-profile',
         class: 'profile__controls-link',
       }),
       editPasswordPageLink: new Link({
         anchor: 'Изменить пароль',
-        href: '/password',
+        href: '/settings/edit-password',
         class: 'profile__controls-link',
       }),
-      logoutLink: new Link({
-        anchor: 'Выйти',
-        href: '/',
-        class: 'profile__controls-link profile__controls-link_type_exit',
+
+      logoutButton: new Button({
+        text: 'Выйти',
+        type: 'button',
+        class: 'profile__logout-button',
+        events: {
+          click: (event: Event) => {
+            event.preventDefault();
+            this.handleLogoutClick();
+          },
+        },
       }),
     });
   }
+
+  render() {
+    return this.compile(template, {
+      ...this._children,
+      ...this._props,
+    });
+  }
+
+  componentDidMount(): void {
+    const { user } = this._props;
+
+    this._children.email.setProps({ value: user.email });
+    this._children.login.setProps({ value: user.login });
+    this._children.name.setProps({ value: user.first_name });
+    this._children.secondName.setProps({
+      value: user.second_name,
+    });
+    this._children.nick.setProps({
+      value: user.display_name,
+    });
+    this._children.phone.setProps({
+      value: user.phone,
+    });
+  }
+
+  async handleLogoutClick() {
+    await authController.logout();
+  }
+}
+
+export default connect(store, ProfilePage, mapStateToProps);
+
+function mapStateToProps(state: AppState) {
+  return { user: { ...state.user } };
 }
