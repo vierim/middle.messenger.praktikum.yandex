@@ -1,45 +1,50 @@
-import { PageComponent } from '../../core/page';
-import { Props } from '../../core/component/types';
+import Component from '../../core/component';
+import store, { AppState } from '../../services/store';
+import { connect } from '../../core/store';
 import {
-  handleFieldValidity,
-  handleFormSubmit,
-} from '../../core/helpers/forms';
+  enableFormValidation,
+  fieldValidity,
+  getFieldsValues,
+} from '../../core/validation/form-utils';
 
+import { userController } from '../../controllers';
+
+import { Toaster } from '../../modules';
 import { Avatar, Char, Button, BackButton } from '../../components';
 
-import { template } from './edit-profile-page.tmpl';
-import { router } from '../../main';
+import type { ProfilePageProps } from './interface';
 
-export class EditProfilePage extends PageComponent {
-  constructor(props?: Props) {
-    super(template, {
+import { template } from './edit-profile-page.tmpl';
+
+class EditProfilePage extends Component {
+  constructor(props?: ProfilePageProps) {
+    super('main', {
       ...props,
+      class: 'layout',
+
       avatar: new Avatar({
-        changeable: true,
+        changeable: false,
       }),
-      backButton: new BackButton({ class: 'profile__back-btn' }),
+      backButton: new BackButton({ 
+        class: 'profile__back-btn',
+      }),
       button: new Button({
         text: 'Сохранить',
       }),
+
       email: new Char({
         label: 'Почта',
         type: 'email',
         name: 'email',
-        value: 'pochta@yandex.ru',
-        pattern: '^[A-Za-z\\d._]+@[A-Za-z]+\\.[A-Za-z]{2,}$',
-        isEdit: true,
+        value: '',
       }),
       login: new Char({
         label: 'Логин',
         type: 'text',
         name: 'login',
-        value: 'ivanivanov',
-        minLength: '3',
-        maxLength: '20',
-        pattern: '^(?=.*[A-Za-z])[A-Za-z0-9_]+$',
-        required: true,
+        value: '',
         events: {
-          focusout: handleFieldValidity,
+          focusout: (event: Event) => this.handleFieldFocusOut(event),
         },
         isEdit: true,
       }),
@@ -47,11 +52,9 @@ export class EditProfilePage extends PageComponent {
         label: 'Имя',
         type: 'text',
         name: 'first_name',
-        value: 'Иван',
-        pattern: '^[A-ZА-Я][a-zA-Zа-яА-Я]*$',
-        required: true,
+        value: '',
         events: {
-          focusout: handleFieldValidity,
+          focusout: (event: Event) => this.handleFieldFocusOut(event),
         },
         isEdit: true,
       }),
@@ -59,11 +62,9 @@ export class EditProfilePage extends PageComponent {
         label: 'Фамилия',
         type: 'text',
         name: 'second_name',
-        value: 'Иванов',
-        pattern: '^[A-ZА-Я][a-zA-Zа-яА-Я]*$',
-        required: true,
+        value: '',
         events: {
-          focusout: handleFieldValidity,
+          focusout: (event: Event) => this.handleFieldFocusOut(event),
         },
         isEdit: true,
       }),
@@ -71,11 +72,9 @@ export class EditProfilePage extends PageComponent {
         label: 'Имя в чате',
         type: 'text',
         name: 'display_name',
-        value: 'Иван',
-        pattern: '^[A-ZА-Я][a-zA-Zа-яА-Я]*$',
-        required: true,
+        value: '',
         events: {
-          focusout: handleFieldValidity,
+          focusout: (event: Event) => this.handleFieldFocusOut(event),
         },
         isEdit: true,
       }),
@@ -83,22 +82,69 @@ export class EditProfilePage extends PageComponent {
         label: 'Телефон',
         type: 'tel',
         name: 'phone',
-        value: '+79099673030',
-        minLength: '10',
-        maxLength: '15',
-        pattern: '^\\+?\\d*$',
-        required: true,
+        value: '',
         events: {
-          focusout: handleFieldValidity,
+          focusout: (event: Event) => this.handleFieldFocusOut(event),
         },
         isEdit: true,
       }),
+
+      toasterBlock: new Toaster(),
+
       events: {
-        submit: (evt) => {
-          handleFormSubmit(evt);
-          router.navigate('/profile');
+        submit: (event: Event) => {
+          event.preventDefault();
+          console.log('submit');
+          this.handleEditProfileFormSubmit(event);
         },
       },
     });
   }
+
+  render() {
+    return this.compile(template, {
+      ...this._children,
+      ...this._props,
+    });
+  }
+
+  componentDidMount(): void {
+    const { user } = this._props as ProfilePageProps;
+
+    this._children.email.setProps({ value: user.email });
+    this._children.login.setProps({ value: user.login });
+    this._children.name.setProps({ value: user.first_name });
+    this._children.secondName.setProps({
+      value: user.second_name,
+    });
+    this._children.nick.setProps({
+      value: user.display_name,
+    });
+    this._children.phone.setProps({
+      value: user.phone,
+    });
+  }
+
+  handleFieldFocusOut(event: Event) {
+    const element = event.target as HTMLInputElement;
+
+    fieldValidity(element);
+  }
+
+  async handleEditProfileFormSubmit(event: Event) {
+    const profileForm = event.target as HTMLFormElement;
+
+    const isFormValid = enableFormValidation(profileForm);
+
+    if (isFormValid) {
+      const data = getFieldsValues(profileForm);
+      userController.updateUserData(data);
+    }
+  }
+}
+
+export default connect(store, EditProfilePage, mapStateToProps);
+
+function mapStateToProps(state: AppState) {
+  return { user: { ...state.user } };
 }
