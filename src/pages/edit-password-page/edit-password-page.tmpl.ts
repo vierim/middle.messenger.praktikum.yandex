@@ -26,4 +26,6 @@ export const template = `
       </form>
     </div>
   </div>
+
+  {{{ toasterBlock }}}
 `;

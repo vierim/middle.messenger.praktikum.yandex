@@ -1,17 +1,24 @@
 import Component, { Props } from '../../core/component';
-import { fieldValidity } from '../../core/validation/form-utils';
+import {
+  enableFormValidation,
+  fieldValidity,
+  getFieldsValues,
+} from '../../core/validation/form-utils';
 
+import { userController } from '../../controllers';
+
+import { Toaster } from '../../modules';
 import { Avatar, BackButton, Button, Char } from '../../components';
 
 import { template } from './edit-password-page.tmpl';
-import router from '../../services/router';
-import UserAPI from '../../api/user-api';
 
 export class EditPasswordPage extends Component {
   constructor(props?: Props) {
     super('main', {
       ...props,
+
       class: 'layout',
+
       avatar: new Avatar({
         changeable: false,
       }),
@@ -19,17 +26,14 @@ export class EditPasswordPage extends Component {
       button: new Button({
         text: 'Сохранить',
       }),
+
       oldPassword: new Char({
         label: 'Старый пароль',
         type: 'password',
         name: 'oldPassword',
         value: '',
-        minLength: '8',
-        maxLength: '40',
-        pattern: '^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]+$',
-        required: true,
         events: {
-          focusout: fieldValidity,
+          focusout: (event: Event) => this.handleFieldFocusOut(event),
         },
         isEdit: true,
       }),
@@ -38,12 +42,8 @@ export class EditPasswordPage extends Component {
         type: 'password',
         name: 'newPassword',
         value: '',
-        minLength: '8',
-        maxLength: '40',
-        pattern: '^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]+$',
-        required: true,
         events: {
-          focusout: fieldValidity,
+          focusout: (event: Event) => this.handleFieldFocusOut(event),
         },
         isEdit: true,
       }),
@@ -52,17 +52,19 @@ export class EditPasswordPage extends Component {
         type: 'password',
         name: 'repeat-password',
         value: '',
-        minLength: '8',
-        maxLength: '40',
-        pattern: '^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]+$',
-        required: true,
         events: {
-          focusout: fieldValidity,
+          focusout: (event: Event) => this.handleFieldFocusOut(event),
         },
         isEdit: true,
       }),
+
+      toasterBlock: new Toaster(),
+      
       events: {
-        submit: handleSubmit,
+        submit: (event: Event) => {
+          event.preventDefault();
+          this.handleSubmit(event);
+        },
       },
     });
   }
@@ -73,44 +75,20 @@ export class EditPasswordPage extends Component {
       ...this._props,
     });
   }
-}
 
-async function handleSubmit (event: Event) {
-  event.preventDefault();
+  handleFieldFocusOut(event: Event) {
+    const element = event.target as HTMLInputElement;
 
-  const formElements = (event.target as HTMLFormElement).elements;
+    fieldValidity(element);
+  }
 
-  const inputList = Array.from(formElements).filter(
-    (element): element is HTMLInputElement =>
-      !!(element as HTMLInputElement).name
-  );
-
-  type FormatedLoginForm = Array<string>
-
-  const x = inputList.reduce<FormatedLoginForm[]>((acc, current) => {
-    const { name, value } = current;
-
-    if (name !== 'repeat-password') {
-      acc.push([name, value]);
-    }
-
-    return acc;
-  }, []);
-
-  const data = Object.fromEntries(x);
-
-  const userService = new UserAPI();
-
-  try {
-    await userService.updateUserPassword(data);
-
-    router.navigate('/settings');
-
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    } else {
-      console.error('Unknown error');
+  async handleSubmit(event: Event) {
+    const updatePasswordForm = event.target as HTMLFormElement;
+    const isFormValid = enableFormValidation(updatePasswordForm);
+  
+    if (isFormValid) {
+      const data = getFieldsValues(updatePasswordForm);
+      userController.updatePassword(data);
     }
   }
 }
