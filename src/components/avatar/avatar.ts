@@ -1,39 +1,42 @@
 import Component, { Props } from '../../core/component';
 import { connect } from '../../core/store';
 
-import EditAvatar from '../edit-avatar';
-
 import store, { AppState } from '../../services/store';
+import { userController } from '../../controllers';
+
+import Modal from '../modal';
+import Input from '../input';
 
 import { template } from './avatar.tmpl';
 
-const editAvatar = new EditAvatar();
-
-export class Avatar extends Component {
+class Avatar extends Component {
   constructor(props: Props) {
     super('div', {
       ...props,
       class: 'avatar',
 
-      editAvatar,
+      editAvatarModal: new Modal({
+        headline: 'Загрузите файл',
+        buttonText: 'Поменять',
+        formFields: [
+          new Input({
+            name: 'avatar',
+            type: 'file',
+            acceptFileTypes: 'image/*',
+          })
+        ],
+        onSubmit: (event: Event) => {
+          this.handleEditAvatarFormSubmit(event);
+        },
+      }),
 
       events: {
         click: (event: Event) => {
           event.stopPropagation();
 
-          const element = event.target as HTMLElement;
-          if (!element) {
-            return;
+          if (props.changeable === true) {
+            this.handleAvatarClick();
           }
-
-          const isOverlayClick =
-            element.classList.value === 'edit-avatar__overlay';
-          if (isOverlayClick) {
-            editAvatar.setProps({ isVisible: false });
-            return;
-          }
-
-          if (props.changeable === true) handleAvatarClick();
         },
       },
     });
@@ -45,10 +48,18 @@ export class Avatar extends Component {
       ...this._props,
     });
   }
-}
+  
+  handleAvatarClick() {
+    this._children.editAvatarModal.setProps({ isVisible: true });
+  }
 
-function handleAvatarClick() {
-  editAvatar.setProps({ isVisible: true });
+  async handleEditAvatarFormSubmit(event: Event) {
+    event.preventDefault();
+  
+    const form = event.target as HTMLFormElement;
+    userController.updateUserAvatar(form);
+  }
+  
 }
 
 export default connect(store, Avatar, mapStateToProps);
