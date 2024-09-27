@@ -1,7 +1,7 @@
-import AuthAPI from './api/auth';
+import { AuthAPI } from './api';
 
-import store from './services/store';
 import router from './services/router';
+import store from './services/store';
 
 import {
   LoginPage,
@@ -21,9 +21,12 @@ try {
 
   store.set('isAuth', true);
   store.set('user', userData);
+  
 } catch (error: unknown) {
   if (error instanceof Error) {
-    console.error(error.message);
+    if(error.message !== 'Cookie is not valid') {
+      console.error(error.message);
+    }
   } else {
     console.log(error);
   }
