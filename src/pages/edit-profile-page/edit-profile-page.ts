@@ -9,7 +9,7 @@ import {
 
 import { userController } from '../../controllers';
 
-import { Toaster } from '../../modules';
+import { Notification } from '../../modules';
 import { Avatar, Char, Button, BackButton } from '../../components';
 
 import type { ProfilePageProps } from './interface';
@@ -89,7 +89,7 @@ class EditProfilePage extends Component {
         isEdit: true,
       }),
 
-      toasterBlock: new Toaster(),
+      notification: new Notification(),
 
       events: {
         submit: (event: Event) => {

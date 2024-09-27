@@ -8,7 +8,7 @@ import {
 
 import { authController } from '../../controllers';
 
-import { Toaster } from '../../modules';
+import { Notification } from '../../modules';
 import { Input, Button } from '../../components';
 
 import { template } from './login-page.tmpl';
@@ -48,7 +48,7 @@ class LoginPage extends Component {
         class: 'login-form__link',
       }),
 
-      toasterBlock: new Toaster(),
+      notification: new Notification(),
 
       events: {
         submit: (event: Event) => {

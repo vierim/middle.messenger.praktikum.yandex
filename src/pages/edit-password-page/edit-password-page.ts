@@ -7,7 +7,7 @@ import {
 
 import { userController } from '../../controllers';
 
-import { Toaster } from '../../modules';
+import { Notification } from '../../modules';
 import { Avatar, BackButton, Button, Char } from '../../components';
 
 import { template } from './edit-password-page.tmpl';
@@ -58,7 +58,7 @@ export class EditPasswordPage extends Component {
         isEdit: true,
       }),
 
-      toasterBlock: new Toaster(),
+      notification: new Notification(),
       
       events: {
         submit: (event: Event) => {

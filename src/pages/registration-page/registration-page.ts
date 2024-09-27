@@ -8,7 +8,7 @@ import {
 
 import { authController } from '../../controllers';
 
-import { Toaster } from '../../modules';
+import { Notification } from '../../modules';
 import { Input, Button } from '../../components';
 
 import { template } from './registration-page.tmpl';
@@ -87,7 +87,7 @@ export class RegistrationPage extends Component {
         class: 'registration-form__link',
       }),
 
-      toasterBlock: new Toaster(),
+      notification: new Notification(),
 
       events: {
         submit: (event: Event) => {

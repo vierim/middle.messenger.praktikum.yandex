@@ -18,5 +18,5 @@ export const template = `
     </form>
   </div>
 
-  {{{ toasterBlock }}}
+  {{{ notification }}}
 `;

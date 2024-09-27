@@ -27,5 +27,5 @@ export const template = `
     </div>
   </div>
 
-  {{{ toasterBlock }}}
+  {{{ notification }}}
 `;
