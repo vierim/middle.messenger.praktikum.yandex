@@ -1,8 +1,8 @@
 import { ChatAPI } from '../api';
 import store from '../services/store';
+import userController from './user-controller';
 import { errorHandler } from '../utils/error-handler';
 import { formatDate } from '../utils/format-date';
-import userController from './user-controller';
 
 class ChatController {
   private readonly _api: ChatAPI;
@@ -59,20 +59,70 @@ class ChatController {
     });
   }
 
-  async addUserToCurrentChat(login: string) {
-    const currentChatId = store.get().activeChat?.id;
-
-    if (!currentChatId) {
-      return;
+  async createNewChat(title: string) {
+    try {
+      await this._api.createChatRequest({ title });
+      await this.getAllChats();
+    } catch (error: unknown) {
+      errorHandler(error);
     }
+  }
 
-    const newUserId = await userController.searchUserByLogin(login);
-    const data = {
-      users: [newUserId],
-      chatId: currentChatId,
-    };
+  async addUserToCurrentChat(login: string) {
+    try {
+      const currentChatId = store.get().activeChat?.id;
 
-    await this._api.addUserToChatRequest(data);
+      if (!currentChatId) {
+        return;
+      }
+
+      const searchRequest = await userController.searchUserByLogin(login);
+      if (searchRequest && searchRequest.length > 0) {
+        const newUserId = searchRequest[0].id;
+
+        const data = {
+          users: [newUserId],
+          chatId: currentChatId,
+        };
+
+        await this._api.addUserToChatRequest(data);
+      }
+    } catch (error: unknown) {
+      errorHandler(error);
+    }
+  }
+
+  async removeUserFromCurrentChat(login: string) {
+    try {
+      const currentChatId = store.get().activeChat?.id;
+
+      if (!currentChatId) {
+        return;
+      }
+
+      const searchRequest = await userController.searchUserByLogin(login);
+      if (searchRequest && searchRequest.length > 0) {
+        const userId = searchRequest[0].id;
+
+        const data = {
+          users: [userId],
+          chatId: currentChatId,
+        };
+
+        await this._api.deleteUserFromChatRequest(data);
+      }
+    } catch (error: unknown) {
+      errorHandler(error);
+    }
+  }
+
+  async removeCurrentChat(chatId: number) {
+    try {
+      await this._api.deleteChatRequest({ chatId });
+      await this.getAllChats();
+    } catch (error: unknown) {
+      errorHandler(error);
+    }
   }
 }
 

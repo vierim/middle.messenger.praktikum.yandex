@@ -48,7 +48,7 @@ class UserController {
         login,
       });
 
-      return searchRequest[0].id;
+      return searchRequest;
     } catch (error: unknown) {
       errorHandler(error);
     }
