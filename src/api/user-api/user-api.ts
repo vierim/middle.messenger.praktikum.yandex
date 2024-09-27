@@ -1,7 +1,7 @@
 import HttpRequest from '../../core/http-request';
 
 import type { RequestEngine } from '../../core/http-request';
-import { UserData } from '../../entities/user';
+import { UserData, UserInfo } from '../../entities/user';
 import type {
   SearchUserByLoginRequest,
   SearchUserByLoginResponse,
@@ -49,7 +49,7 @@ export default class UserAPI {
     }
   }
 
-  async updateUserAvatar(form: FormData) {
+  async updateUserAvatar(form: FormData): Promise<UserInfo> {
     try {
       const request = await this._apiInstance.putFormData(
         '/profile/avatar',
@@ -70,7 +70,7 @@ export default class UserAPI {
 
   async searchUserByLogin(
     login: SearchUserByLoginRequest
-  ): Promise<SearchUserByLoginResponse> {
+  ): Promise<SearchUserByLoginResponse[]> {
     try {
       const request = await this._apiInstance.post('/search', login);
       const result = await request.json();

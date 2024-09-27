@@ -1,4 +1,4 @@
-import { RequestEngine } from "./interface";
+import { RequestEngine } from './interface';
 
 class HttpRequest implements RequestEngine {
   private _baseUrl: string = '';
@@ -11,7 +11,7 @@ class HttpRequest implements RequestEngine {
     return `${this._baseUrl}${endPointUrl}`;
   }
 
-  async get(endPointUrl: string) {
+  async get(endPointUrl: string): Promise<unknown> {
     const res = await fetch(this._getRequestUrl(endPointUrl), {
       method: 'GET',
       mode: 'cors',
@@ -47,6 +47,24 @@ class HttpRequest implements RequestEngine {
   async put(endPointUrl: string, data: Record<string, unknown>) {
     const res = await fetch(this._getRequestUrl(endPointUrl), {
       method: 'put',
+      credentials: 'include',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      return Promise.reject(res);
+    }
+
+    return res;
+  }
+
+  async delete(endPointUrl: string, data: Record<string, unknown>) {
+    const res = await fetch(this._getRequestUrl(endPointUrl), {
+      method: 'delete',
       credentials: 'include',
       mode: 'cors',
       headers: {

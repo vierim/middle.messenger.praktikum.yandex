@@ -42,7 +42,7 @@ export default class AuthAPI {
 
   async getUserInfo(): Promise<UserInfo> {
     try {
-      const getUserData = await this._apiInstance.get('/user');
+      const getUserData = await this._apiInstance.get('/user') as UserInfo;
 
       return getUserData;
     } catch (error: unknown) {

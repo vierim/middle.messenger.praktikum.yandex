@@ -1,8 +1,17 @@
-import HttpRequest from "../../core/http-request";
+import HttpRequest from '../../core/http-request';
 
-import type { RequestEngine } from "../../core/http-request";
-import type { ChatItem } from "../../entities/chat";
-import type { ChatTokenResponse } from "./interface";
+import type { RequestEngine } from '../../core/http-request';
+import type {
+  addUserToChatRequest,
+  ChatTokenResponse,
+  CreateNewChatRequest,
+  CreateNewChatResponse,
+  DeleteChatRequest,
+  DeleteChatResponse,
+  DeleteUserFromChatRequest,
+  GetAllChatsResponse,
+  GetChatUserResponse,
+} from './interface';
 
 export default class ChatAPI {
   private _apiInstance: RequestEngine;
@@ -11,9 +20,9 @@ export default class ChatAPI {
     this._apiInstance = new HttpRequest('/api/v2/chats');
   }
 
-  async getAllChats(): Promise<ChatItem[]> {
+  async getAllChats(): Promise<GetAllChatsResponse> {
     try {
-      const response = await this._apiInstance.get('');
+      const response = (await this._apiInstance.get('')) as GetAllChatsResponse;
       return response;
     } catch (error: unknown) {
       if (error instanceof Response) {
@@ -25,7 +34,9 @@ export default class ChatAPI {
     }
   }
 
-  async createChatRequest(data: any) {
+  async createChatRequest(
+    data: CreateNewChatRequest
+  ): Promise<CreateNewChatResponse> {
     try {
       const response = await this._apiInstance.post('', data);
       return response.json();
@@ -39,7 +50,7 @@ export default class ChatAPI {
     }
   }
 
-  async addUserToChatRequest(data: any) {
+  async addUserToChatRequest(data: addUserToChatRequest) {
     try {
       const response = await this._apiInstance.put('/users', data);
       return response;
@@ -53,10 +64,9 @@ export default class ChatAPI {
     }
   }
 
-  async deleteUserFromChatRequest(data: any) {
+  async deleteUserFromChatRequest(data: DeleteUserFromChatRequest) {
     try {
-      const response = await this._apiInstance.delete('/users', data);
-      return response;
+      await this._apiInstance.delete('/users', data);
     } catch (error: unknown) {
       if (error instanceof Response) {
         const { reason } = await error.json();
@@ -95,10 +105,10 @@ export default class ChatAPI {
     }
   }
 
-  async getChatUsers(id: number): any {
+  async getChatUsers(id: number): Promise<GetChatUserResponse> {
     try {
-      const response = await this._apiInstance.get(`/${id}/users`);
-      console.log(response)
+      const response = await this._apiInstance.get(`/${id}/users`) as GetChatUserResponse;
+
       return response;
     } catch (error: unknown) {
       if (error instanceof Response) {
@@ -110,10 +120,13 @@ export default class ChatAPI {
     }
   }
 
-  async deleteChatRequest(data: any): any {
+  async deleteChatRequest(
+    data: DeleteChatRequest
+  ): Promise<DeleteChatResponse> {
     try {
       const response = await this._apiInstance.delete('', data);
-      return response;
+
+      return response.json();
     } catch (error: unknown) {
       if (error instanceof Response) {
         const { reason } = await error.json();
