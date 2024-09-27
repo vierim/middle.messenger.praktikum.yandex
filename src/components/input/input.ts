@@ -9,6 +9,7 @@ export default class Input extends Component {
     super('div', {
       ...props,
       class: 'input',
+      isFileInput: props.type === 'file',
       validity: true,
     });
   }
