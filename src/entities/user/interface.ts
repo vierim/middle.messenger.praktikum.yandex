@@ -8,3 +8,5 @@ export type UserInfo = {
   avatar: string;
   email: string;
 };
+
+export type UserData = Omit<UserInfo, 'id' | 'avatar'>;
