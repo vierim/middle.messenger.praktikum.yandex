@@ -35,65 +35,52 @@
   }
 
   &__conversation {
-    height: 100%;
-  }
-}
-
-.conversation {
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  scroll-behavior: auto;
-  scrollbar-width: thin;
-
-  &__date {
-    text-align: center;
-    color: #999;
-    font-size: 14px;
-    box-sizing: border-box;
-    padding: 40px 0 30px;
-  }
-
-  &__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    height: calc(100% - 87px);
+    overflow: hidden;
   }
 
-  &__item {
-    border-radius: 12px;
-    padding: 11px;
+  &__controls-btn {
+    position: relative;
+    background-color: transparent;
+    padding-left: 37px;
+    border: none;
     box-sizing: border-box;
-    max-width: 402px;
+    height: 22px;
+    text-align: left;
 
-    & p {
-      font-size: 14px;
-      line-height: 18px;
-      margin: 0 0 12px;
-      padding: 0;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0px;
+      width: 22px;
+      height: 22px;
+    }
 
-      &:last-of-type {
-        margin-bottom: 0;
-      }
+    &:hover {
+      cursor: pointer;
     }
 
     &_type {
-      &_inbox {
-        align-self: flex-start;
-        background-color: #f8f8f8;
+      &_add-user {
+        &::before {
+          background-image: url('/add-user-btn.svg');
+        }
       }
 
-      &_outgoing {
-        align-self: flex-end;
-        background-color: #e4edfd;
+      &_remove-user {
+        &::before {
+          background-image: url('/remove-user-btn.svg');
+        }
       }
-    }
 
-    &:last-of-type {
-      margin-bottom: 30px;
+      &_remove-chat {
+        &::before {
+          background-image: url('/remove-chat-btn.svg');
+        }
+      }
     }
   }
 }

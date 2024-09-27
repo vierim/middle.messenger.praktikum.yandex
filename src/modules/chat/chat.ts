@@ -1,10 +1,78 @@
 import Component, { Props } from '../../core/component';
-import { MenuButton } from '../../components';
+import { connect } from '../../core/store';
+import WebSocketTransport from '../../core/websocket-transport';
+
+import { chatController } from '../../controllers';
+import store, { AppState } from '../../services/store';
+
+import Notification from '../notification';
+import { Button, Input, Modal } from '../../components';
+
+import DropdownMenu from './components/dropdown-menu';
+import MessageForm from './components/message-form';
+import MessagesList from './components/messages-list';
 
 import { template } from './chat.tmpl';
-import { connect } from '../../core/store';
-import store, { AppState } from '../../services/store';
-import MessageForm from './components/message-form';
+
+const addUserModal = new Modal({
+  headline: 'Добавить пользователя',
+  buttonText: 'Добавить',
+  formFields: [
+    new Input({
+      label: 'Логин',
+      name: 'login',
+      type: 'text',
+    }),
+  ],
+  onSubmit: (event: Event) => {
+    event.preventDefault();
+    handleAddUserSubmit(event);
+  },
+});
+
+const removeUserModal = new Modal({
+  headline: 'Удалить пользователя',
+  buttonText: 'Удалить',
+  formFields: [
+    new Input({
+      label: 'Логин',
+      name: 'login',
+      type: 'text',
+    }),
+  ],
+  onSubmit: handleRemoveUserFormSubmit,
+});
+
+const addUserButton = new Button({
+  text: 'Добавить пользователя',
+  type: 'button',
+  class: 'chat__controls-btn chat__controls-btn_type_add-user',
+  events: {
+    click: () => {
+      addUserModal.setProps({ isVisible: true });
+    },
+  },
+});
+
+const deleteUserButton = new Button({
+  text: 'Удалить пользователя',
+  type: 'button',
+  class: 'chat__controls-btn chat__controls-btn_type_remove-user',
+  events: {
+    click: () => {
+      removeUserModal.setProps({ isVisible: true });
+    },
+  },
+});
+
+const deleteChatButton = new Button({
+  text: 'Удалить чат',
+  type: 'button',
+  class: 'chat__controls-btn chat__controls-btn_type_remove-chat',
+  events: {
+    click: handleRemoveChatButtonClick,
+  },
+});
 
 class Chat extends Component {
   private _socket?: WebSocketTransport;
@@ -13,6 +81,16 @@ class Chat extends Component {
     super('div', {
       ...props,
 
+      class: 'chat',
+      current: null,
+
+      addUserModal,
+      removeUserModal,
+
+      dropdownMenu: new DropdownMenu({
+        controls: [addUserButton, deleteUserButton, deleteChatButton],
+      }),
+      messages: new MessagesList(),
       messageForm: new MessageForm({
         events: {
           submit: (event: Event) => {
@@ -20,20 +98,14 @@ class Chat extends Component {
           },
         },
       }),
-
-      class: 'chat',
-      current: null,
-      messages: [],
+      notification: new Notification(),
     });
   }
 
   render() {
-    console.warn(`\n Render Chat component.`);
-    console.log({ props: this._props });
-
     return this.compile(template, {
-      menuButton: new MenuButton(),
-      current: this._props?.current,
+      ...this._props,
+      ...this._children,
     });
   }
 
@@ -44,7 +116,8 @@ class Chat extends Component {
       const token = store.get().activeChat?.token;
 
       this._socket = new WebSocketTransport(
-        `wss://ya-praktikum.tech/ws/chats/${userId}/${chatId}/${token}`
+        `wss://ya-praktikum.tech/ws/chats/${userId}/${chatId}/${token}`,
+        store
       );
     }
 
@@ -61,80 +134,44 @@ function mapStateToProps(state: AppState) {
 const handleMessageFormSubmit = (event: Event, socket?: WebSocketTransport) => {
   event.preventDefault();
 
-  console.log(event.target);
-  console.log(socket);
+  if(!socket) {
+    return;
+  }
+  
+  const messageForm = event.target as HTMLFormElement;
 
-  socket?.sendMessage('message X');
+  const inputElement = messageForm.querySelector(
+    '.message-form__input'
+  ) as HTMLInputElement;
+
+  socket?.sendMessage(inputElement.value);
+  messageForm.reset();
 };
 
-class WebSocketTransport {
-  private _socket!: WebSocket;
-  private _timerId?: number;
+async function handleRemoveUserFormSubmit(event: Event) {
+  const formElement = event.target as HTMLFormElement;
 
-  constructor(url: string) {
-    this._socket = new WebSocket(url);
+  const { value } = formElement.querySelector('#login') as HTMLInputElement;
 
-    this._setTimer = this._setTimer.bind(this);
-    this._sendPingMsg = this._sendPingMsg.bind(this);
+  await chatController.removeUserFromCurrentChat(value);
+  formElement.reset();
+}
 
-    this._setListeners();
-    this._setTimer();
+async function handleAddUserSubmit(event: Event) {
+  const formElement = event.target as HTMLFormElement;
+
+  const { value } = formElement.querySelector('#login') as HTMLInputElement;
+
+  await chatController.addUserToCurrentChat(value);
+  formElement.reset();
+}
+
+async function handleRemoveChatButtonClick() {
+  const chatId = store.get().activeChat?.id;
+
+  if(!chatId) {
+    return;
   }
 
-  _setListeners() {
-    this._socket.addEventListener('open', () => {
-      console.log('Соединение установлено');
-      console.log(this._socket);
-    });
-
-    this._socket.addEventListener('close', (event) => {
-      if (event.wasClean) {
-        console.log('Соединение закрыто чисто');
-      } else {
-        console.log('Обрыв соединения');
-      }
-
-      clearTimeout(this._timerId);
-
-      console.log(`Код: ${event.code} | Причина: ${event.reason}`);
-    });
-
-    this._socket.addEventListener('message', (event) => {
-      
-      const message = JSON.parse(event.data);
-      
-      if (message.type !== 'pong') {
-        console.log('Получены данные', event.data);
-        console.log({ message });
-      }
-    });
-
-    this._socket.addEventListener('error', (event) => {
-      console.log('Ошибка', event.message);
-    });
-  }
-
-  _setTimer(delay = 5000) {
-    this._timerId = setTimeout(() => {
-      this._sendPingMsg();
-      this._setTimer();
-    }, delay);
-  }
-
-  _sendPingMsg() {
-    this._socket.send(
-      JSON.stringify({
-        type: 'ping',
-      })
-    );
-  }
-
-  sendMessage(text: string) {
-    this._socket.send(
-      JSON.stringify({
-        content: text,
-        type: 'message',
-      })
-    );
-  }
+  await chatController.removeCurrentChat(chatId);
 }

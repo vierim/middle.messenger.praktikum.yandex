@@ -1,0 +1,31 @@
+.message-item {
+  display: flex;
+  
+  &__container {
+    display: inline-block;
+    border-radius: 12px;
+    padding: 11px;
+    box-sizing: border-box;
+    max-width: 402px;
+
+    &_direction {
+      &_in {
+        background-color: #f8f8f8;
+      }
+  
+      &_out {
+        background-color: #e4edfd;
+      }
+    }
+  }
+
+  &_direction {
+    &_in {
+      justify-content: flex-start;
+    }
+
+    &_out {
+      justify-content: flex-end;
+    }
+  }
+}

@@ -1,25 +1,29 @@
 @use '../../../../variables.scss' as *;
 
 .contact-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  border-top: 1px solid #eaeaea;
-  box-sizing: border-box;
-  padding: 12px 10px;
-  transition: background-color 0.3s ease-in-out;
 
-  &:hover {
-    background-color: #efefef;
-    cursor: pointer;
-  }
 
-  &_current {
-    background-color: #e4edfd;
-
+  &__container {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    border-top: 1px solid #eaeaea;
+    box-sizing: border-box;
+    padding: 12px 10px;
+    transition: background-color 0.3s ease-in-out;
+  
     &:hover {
+      background-color: #efefef;
+      cursor: pointer;
+    }
+  
+    &_current {
       background-color: #e4edfd;
-      cursor: auto;
+  
+      &:hover {
+        background-color: #e4edfd;
+        cursor: auto;
+      }
     }
   }
 
