@@ -1,0 +1,45 @@
+.modal {
+
+  &__wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    opacity: 0.4;
+    z-index: -1;
+  }
+
+  &__container {
+    background-color: #fff;
+    border-radius: 12px;
+    width: 340px;
+    padding: 40px 30px;
+    box-sizing: border-box;
+  }
+
+  &__headline {
+    font-size: 15px;
+    line-height: 20px;
+    font-weight: 500;
+    margin: 0 0 43px;
+    text-align: center;
+  }
+
+  &__fields-wrapper {
+    margin: 50px 0 33px 0;
+  }
+}
