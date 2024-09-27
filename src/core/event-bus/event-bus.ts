@@ -21,7 +21,7 @@ export default class EventBus {
 
   off(event: string, callback: () => void) {
 		if (!this.listeners[event]) {
-      console.log(`Событие ${event} не зарегистрировано`);
+      console.warn(`Событие ${event} не зарегистрировано`);
       return;
     }
 
@@ -32,7 +32,7 @@ export default class EventBus {
 
 	emit(event: string, ...args: Array<unknown>) {
     if (!this.listeners[event]) {
-      console.log(`Событие ${event} не зарегистрировано`);
+      console.warn(`Событие ${event} не зарегистрировано`);
       return;
     }
     
