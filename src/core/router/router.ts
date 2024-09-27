@@ -44,7 +44,7 @@ class Router {
     const { url } = route;
 
     if (this.hasRouteFor(url)) {
-      console.log(`Url '${url}' is already exist`);
+      console.warn(`Url '${url}' is already exist`);
     } else {
       this.routes.push(route);
     }
@@ -68,7 +68,6 @@ class Router {
   }
 
   navigate(url: string) {
-    console.log(`navigate to ${url}`);
     this.history.pushState({}, '', url);
     this.setRoute(url);
   }
