@@ -11,11 +11,11 @@ export const template = `
         {{{ searchBar }}}
       </div>
 
-      {{{ contactsList }}}
+      {{{ chatsList }}}
     </div>
     
     <div class="feed__chat">
-      {{{ chat }}}
+      {{{ activeChat }}}
     </div>
   </div>
 `;

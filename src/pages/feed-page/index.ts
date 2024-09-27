@@ -1,3 +1,3 @@
-import { FeedPage } from './feed-page';
+import FeedPage from './feed-page';
 
 export default FeedPage;
