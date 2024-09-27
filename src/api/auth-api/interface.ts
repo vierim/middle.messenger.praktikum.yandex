@@ -1,4 +1,4 @@
-export type SignUpRequestData = {
+export type SignUpRequest = {
   email: string;
   first_name: string;
   second_name: string;
@@ -7,7 +7,7 @@ export type SignUpRequestData = {
   password: string;
 };
 
-export type SignInRequestData = {
+export type SignInRequest = {
   login: string;
   password: string;
 };

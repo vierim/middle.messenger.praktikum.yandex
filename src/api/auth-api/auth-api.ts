@@ -1,8 +1,7 @@
-import HttpRequest from '../../core/http-request';
+import HttpRequest, { RequestEngine } from '../../core/http-request';
 
-import type { RequestEngine } from '../../core/http-request';
 import type { UserInfo } from '../../entities/user';
-import type { SignInRequestData, SignUpRequestData } from './interface';
+import type { SignInRequest, SignUpRequest } from './interface';
 
 export default class AuthAPI {
   private _apiInstance: RequestEngine;
@@ -11,9 +10,10 @@ export default class AuthAPI {
     this._apiInstance = new HttpRequest('/api/v2/auth');
   }
 
-  async signup(data: SignUpRequestData) {
+  async signup(data: SignUpRequest) {
     try {
       const response = await this._apiInstance.post('/signup', data);
+      
       return response;
     } catch (error: unknown) {
       if (error instanceof Response) {
@@ -25,7 +25,7 @@ export default class AuthAPI {
     }
   }
 
-  async signIn(data: SignInRequestData) {
+  async signIn(data: SignInRequest) {
     try {
       const response = await this._apiInstance.post('/signin', data);
 
