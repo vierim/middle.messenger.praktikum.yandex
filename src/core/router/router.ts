@@ -1,3 +1,4 @@
+import { authController } from '../../controllers';
 import store from '../../services/store';
 import Component from '../component';
 
@@ -58,12 +59,15 @@ class Router {
     return this;
   }
 
-  start() {
+  async start() {
     window.addEventListener('popstate', () => {
       this.setRoute(document.location.pathname);
     });
 
     const { pathname } = document.location;
+
+    await authController.getUserData();
+
     this.setRoute(pathname);
   }
 
