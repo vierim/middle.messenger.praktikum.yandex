@@ -1,13 +1,15 @@
 import Handlebars from 'handlebars';
 
-import Component, { Props } from '../../core/component';
+import Component from '../../core/component';
 
 import router from '../../services/router';
+
+import type { BackButtonProps } from './interface';
 
 import { template } from './back-button.tmpl';
 
 export class BackButton extends Component {
-  constructor(props: Props) {
+  constructor(props?: BackButtonProps) {
     super('button', { 
       ...props,
       events: {

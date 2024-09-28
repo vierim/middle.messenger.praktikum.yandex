@@ -10,6 +10,7 @@ import { Avatar, BackButton, Button, Char } from '../../components';
 import type { ProfilePageProps } from './interface';
 
 import { template } from './profile-page.tmpl';
+import { UserData } from '../../entities/user';
 
 class ProfilePage extends Component {
   constructor(props?: ProfilePageProps) {
@@ -95,20 +96,22 @@ class ProfilePage extends Component {
   }
 
   componentDidMount(): void {
-    const { user } = this._props;
+    if (this._props.user) {
+      const user = this._props.user as UserData;
 
-    this._children.email.setProps({ value: user.email });
-    this._children.login.setProps({ value: user.login });
-    this._children.name.setProps({ value: user.first_name });
-    this._children.secondName.setProps({
-      value: user.second_name,
-    });
-    this._children.nick.setProps({
-      value: user.display_name,
-    });
-    this._children.phone.setProps({
-      value: user.phone,
-    });
+      this._children.email.setProps({ value: user.email });
+      this._children.login.setProps({ value: user.login });
+      this._children.name.setProps({ value: user.first_name });
+      this._children.secondName.setProps({
+        value: user.second_name,
+      });
+      this._children.nick.setProps({
+        value: user.display_name,
+      });
+      this._children.phone.setProps({
+        value: user.phone,
+      });
+    }
   }
 
   async handleLogoutClick() {
@@ -116,7 +119,7 @@ class ProfilePage extends Component {
   }
 }
 
-export default connect(store, ProfilePage, mapStateToProps);
+export default connect<ProfilePageProps, AppState>(store, ProfilePage, mapStateToProps);
 
 function mapStateToProps(state: AppState) {
   return { user: { ...state.user } };

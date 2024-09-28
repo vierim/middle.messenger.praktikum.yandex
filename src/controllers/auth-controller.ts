@@ -1,4 +1,4 @@
-import { AuthAPI, SignUpRequestData } from '../api';
+import { AuthAPI, SignUpRequest } from '../api';
 
 import router from '../services/router';
 import store from '../services/store';
@@ -54,7 +54,7 @@ class AuthController {
     }
   }
 
-  async signUp(data: SignUpRequestData) {
+  async signUp(data: SignUpRequest) {
     try {
       await this.authApi.signup(data);
 

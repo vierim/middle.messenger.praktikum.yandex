@@ -3,6 +3,7 @@ import Handlebars from 'handlebars';
 
 import { EventBus } from '../event-bus';
 import { Children, Lists, Props } from './types';
+import { isEqual } from '../utils';
 
 export default class Component {
   static EVENTS = {
@@ -77,8 +78,11 @@ export default class Component {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   componentDidUpdate(oldProps?: Props, newProps?: Props) {
+    if(oldProps && newProps) {
+      return !isEqual(oldProps, newProps);
+    }
+
     return true;
   }
 

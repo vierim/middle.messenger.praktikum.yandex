@@ -11,6 +11,7 @@ import { Notification } from '../../modules';
 import { Avatar, BackButton, Button, Char } from '../../components';
 
 import { template } from './edit-password-page.tmpl';
+import { UpdatePasswordRequest } from '../../api/user-api/interface';
 
 export class EditPasswordPage extends Component {
   constructor(props?: Props) {
@@ -59,7 +60,7 @@ export class EditPasswordPage extends Component {
       }),
 
       notification: new Notification(),
-      
+
       events: {
         submit: (event: Event) => {
           event.preventDefault();
@@ -85,9 +86,9 @@ export class EditPasswordPage extends Component {
   async handleSubmit(event: Event) {
     const updatePasswordForm = event.target as HTMLFormElement;
     const isFormValid = enableFormValidation(updatePasswordForm);
-  
+
     if (isFormValid) {
-      const data = getFieldsValues(updatePasswordForm);
+      const data = getFieldsValues(updatePasswordForm) as UpdatePasswordRequest;
       userController.updatePassword(data);
     }
   }

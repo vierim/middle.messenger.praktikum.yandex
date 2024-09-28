@@ -15,6 +15,7 @@ import { Avatar, Char, Button, BackButton } from '../../components';
 import type { ProfilePageProps } from './interface';
 
 import { template } from './edit-profile-page.tmpl';
+import { UserData } from '../../entities/user';
 
 class EditProfilePage extends Component {
   constructor(props?: ProfilePageProps) {
@@ -25,7 +26,7 @@ class EditProfilePage extends Component {
       avatar: new Avatar({
         changeable: false,
       }),
-      backButton: new BackButton({ 
+      backButton: new BackButton({
         class: 'profile__back-btn',
       }),
       button: new Button({
@@ -94,7 +95,6 @@ class EditProfilePage extends Component {
       events: {
         submit: (event: Event) => {
           event.preventDefault();
-          console.log('submit');
           this.handleEditProfileFormSubmit(event);
         },
       },
@@ -137,13 +137,17 @@ class EditProfilePage extends Component {
     const isFormValid = enableFormValidation(profileForm);
 
     if (isFormValid) {
-      const data = getFieldsValues(profileForm);
+      const data = getFieldsValues(profileForm) as UserData;
       userController.updateUserData(data);
     }
   }
 }
 
-export default connect(store, EditProfilePage, mapStateToProps);
+export default connect<ProfilePageProps, AppState>(
+  store,
+  EditProfilePage,
+  mapStateToProps
+);
 
 function mapStateToProps(state: AppState) {
   return { user: { ...state.user } };

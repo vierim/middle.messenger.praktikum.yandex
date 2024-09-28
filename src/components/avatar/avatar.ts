@@ -10,7 +10,7 @@ import Input from '../input';
 import { template } from './avatar.tmpl';
 
 class Avatar extends Component {
-  constructor(props: Props) {
+  constructor(props?: Props) {
     super('div', {
       ...props,
       class: 'avatar',
@@ -34,7 +34,7 @@ class Avatar extends Component {
         click: (event: Event) => {
           event.stopPropagation();
 
-          if (props.changeable === true) {
+          if (props?.changeable === true) {
             this.handleAvatarClick();
           }
         },

@@ -39,7 +39,7 @@ export function isEqual(
 
   // Рекурсивное сравнение значений
   for (const key of keys1) {
-    if (!isEqual(obj1[key], obj2[key])) {
+    if (!isEqual((obj1 as Indexed)[key], (obj2 as Indexed)[key])) {
       return false;
     }
   }

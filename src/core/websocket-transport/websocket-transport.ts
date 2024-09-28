@@ -1,3 +1,4 @@
+import { AppState } from "../../services/store";
 import type { StoreInterface } from "../store";
 
 class WebSocketTransport {
@@ -5,9 +6,9 @@ class WebSocketTransport {
 
   private _socket!: WebSocket;
   private _timerId?: number;
-  private _store: StoreInterface;
+  private _store: StoreInterface<AppState>;
 
-  constructor(url: string, store: StoreInterface) {
+  constructor(url: string, store: StoreInterface<AppState>) {
     if (WebSocketTransport.__instance) {
       WebSocketTransport.__instance._socket.close();
     }
@@ -58,8 +59,9 @@ class WebSocketTransport {
             const bTime = new Date(b.time);
 
             if (aTime > bTime) return 1;
-            if (aTime == bTime) return 0;
             if (aTime < bTime) return -1;
+
+            return 0;
           });
 
           this._store.set('messages', formatedMessages);

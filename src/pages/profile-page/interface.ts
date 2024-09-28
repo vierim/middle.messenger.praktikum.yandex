@@ -1,12 +1,6 @@
 import { Props } from "../../core/component";
+import { UserData } from "../../entities/user";
 
 export type ProfilePageProps = Props & {
-  user: {
-    email: string;
-    first_name: string;
-    second_name: string;
-    phone: string;
-    login: string;
-    display_name: string;
-  };
+  user: UserData;
 };

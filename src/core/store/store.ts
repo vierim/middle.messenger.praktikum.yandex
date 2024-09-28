@@ -37,16 +37,8 @@ export default class Store<T extends Record<string, unknown>> {
   }
 
   private _setState(path: string, payload: unknown) {
-    console.warn('_setState() method');
-    console.log({ path, payload });
-    console.warn('State before update');
-    console.log({ ...this._state });
-    
     if(this._state) {
       setObjectValue(this._state, path, payload);
     }
-
-    console.warn('State after update');
-    console.log({ ...this._state });
   }
 }

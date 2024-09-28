@@ -11,6 +11,8 @@ import { authController } from '../../controllers';
 import { Notification } from '../../modules';
 import { Input, Button } from '../../components';
 
+import type { SignUpRequest } from '../../api';
+
 import { template } from './registration-page.tmpl';
 
 export class RegistrationPage extends Component {
@@ -116,7 +118,7 @@ export class RegistrationPage extends Component {
     const isFormValid = enableFormValidation(registrationForm);
 
     if (isFormValid) {
-      const data = getFieldsValues(registrationForm);
+      const data = getFieldsValues(registrationForm) as SignUpRequest;
       authController.signUp(data);
     }
   }
