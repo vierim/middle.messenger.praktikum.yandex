@@ -7,4 +7,4 @@ export type Props = Record<string, unknown> & {
   events?: Record<string, (event: Event) => void>;
 };
 
-export type Lists = Record<string, Array<unknown>>;
+export type Lists = Record<string, Array<Component>>;

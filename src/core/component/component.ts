@@ -79,7 +79,7 @@ export default class Component {
   }
 
   componentDidUpdate(oldProps?: Props, newProps?: Props) {
-    if(oldProps && newProps) {
+    if (oldProps && newProps) {
       return !isEqual(oldProps, newProps);
     }
 
@@ -190,7 +190,7 @@ export default class Component {
 
     if (typeof block === 'string') {
       this._element.innerHTML = block;
-    } 
+    }
 
     if (typeof block === 'object') {
       this._element.appendChild(block as DocumentFragment);
@@ -225,7 +225,7 @@ export default class Component {
     return this._element;
   }
 
-  _makePropsProxy(props: Props) {
+  _makePropsProxy<T extends Record<string, unknown>>(props: T) {
     const self = this;
 
     return new Proxy(props, {
@@ -235,10 +235,10 @@ export default class Component {
       },
       set(target, prop, value) {
         const oldValue = target[prop as string];
-        
+
         if (oldValue !== value) {
           const oldProps = { ...target };
-          target[prop as string] = value;
+          (target as Record<string, unknown>)[prop as string] = value;
 
           self.eventBus().emit(Component.EVENTS.FLOW_CDU, oldProps, target);
         }
