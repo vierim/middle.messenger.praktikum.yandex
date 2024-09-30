@@ -24,4 +24,4 @@
 
 - [Sprint 1](https://github.com/vierim/middle.messenger.praktikum.yandex/pull/3)
 - [Sprint 2](https://github.com/vierim/middle.messenger.praktikum.yandex/pull/4)
-- [Sprint 3](https://github.com/vierim/middle.messenger.praktikum.yandex/pull/5)
+- [Sprint 3](https://github.com/vierim/middle.messenger.praktikum.yandex/pull/8)
