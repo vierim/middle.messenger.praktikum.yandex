@@ -19,13 +19,7 @@ class AuthController {
       store.set('isAuth', true);
       store.set('user', userData);
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        if (error.message !== 'Cookie is not valid') {
-          console.error(error.message);
-        }
-      } else {
-        console.error(error);
-      }
+      errorHandler(error);
     }
   }
 

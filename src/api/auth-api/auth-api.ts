@@ -13,12 +13,11 @@ export default class AuthAPI {
   async signup(data: SignUpRequest) {
     try {
       const response = await this._apiInstance.post('/signup', data);
-      
+
       return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }
@@ -31,9 +30,8 @@ export default class AuthAPI {
 
       return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }
@@ -42,13 +40,12 @@ export default class AuthAPI {
 
   async getUserInfo(): Promise<UserInfo> {
     try {
-      const getUserData = await this._apiInstance.get('/user') as UserInfo;
+      const response = (await this._apiInstance.get('/user')) as UserInfo;
 
-      return getUserData;
+      return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }
@@ -61,9 +58,8 @@ export default class AuthAPI {
 
       return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }

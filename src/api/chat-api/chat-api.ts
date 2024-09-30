@@ -25,9 +25,8 @@ export default class ChatAPI {
       const response = (await this._apiInstance.get('')) as GetAllChatsResponse;
       return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }
@@ -38,12 +37,14 @@ export default class ChatAPI {
     data: CreateNewChatRequest
   ): Promise<CreateNewChatResponse> {
     try {
-      const response = await this._apiInstance.post('', data);
-      return response.json();
+      const response = (await this._apiInstance.post(
+        '',
+        data
+      )) as CreateNewChatResponse;
+      return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }
@@ -55,9 +56,8 @@ export default class ChatAPI {
       const response = await this._apiInstance.put('/users', data);
       return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }
@@ -68,9 +68,8 @@ export default class ChatAPI {
     try {
       await this._apiInstance.delete('/users', data);
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }
@@ -82,9 +81,8 @@ export default class ChatAPI {
       const response = await this._apiInstance.get(`/${id}/users`);
       return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }
@@ -93,12 +91,13 @@ export default class ChatAPI {
 
   async getChatTokenRequest(id: number): Promise<ChatTokenResponse> {
     try {
-      const response = await this._apiInstance.post(`/token/${id}`);
-      return response.json();
+      const response = (await this._apiInstance.post(
+        `/token/${id}`
+      )) as ChatTokenResponse;
+      return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }
@@ -107,13 +106,14 @@ export default class ChatAPI {
 
   async getChatUsers(id: number): Promise<GetChatUserResponse> {
     try {
-      const response = await this._apiInstance.get(`/${id}/users`) as GetChatUserResponse;
+      const response = (await this._apiInstance.get(
+        `/${id}/users`
+      )) as GetChatUserResponse;
 
       return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }
@@ -124,13 +124,15 @@ export default class ChatAPI {
     data: DeleteChatRequest
   ): Promise<DeleteChatResponse> {
     try {
-      const response = await this._apiInstance.delete('', data);
+      const response = (await this._apiInstance.delete(
+        '',
+        data
+      )) as DeleteChatResponse;
 
-      return response.json();
+      return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }

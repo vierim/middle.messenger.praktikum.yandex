@@ -20,14 +20,15 @@ export default class UserAPI {
     data: UserData
   ): Promise<SetUserProfileDataResponse> {
     try {
-      const request = await this._apiInstance.put('/profile', data);
-      const updatedData = await request.json();
+      const response = (await this._apiInstance.put(
+        '/profile',
+        data
+      )) as SetUserProfileDataResponse;
 
-      return updatedData;
+      return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }
@@ -36,13 +37,12 @@ export default class UserAPI {
 
   async updateUserPassword(data: UpdatePasswordRequest): Promise<unknown> {
     try {
-      const request = await this._apiInstance.put('/password', data);
+      const response = await this._apiInstance.put('/password', data);
 
-      return request;
+      return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }
@@ -51,17 +51,15 @@ export default class UserAPI {
 
   async updateUserAvatar(form: FormData): Promise<UserInfo> {
     try {
-      const request = await this._apiInstance.putFormData(
+      const response = (await this._apiInstance.putFormData(
         '/profile/avatar',
         form
-      );
-      const updatedData = await request.json();
+      )) as UserInfo;
 
-      return updatedData;
+      return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }
@@ -72,14 +70,15 @@ export default class UserAPI {
     login: SearchUserByLoginRequest
   ): Promise<SearchUserByLoginResponse[]> {
     try {
-      const request = await this._apiInstance.post('/search', login);
-      const result = await request.json();
+      const response = (await this._apiInstance.post(
+        '/search',
+        login
+      )) as SearchUserByLoginResponse[];
 
-      return result;
+      return response;
     } catch (error: unknown) {
-      if (error instanceof Response) {
-        const { reason } = await error.json();
-        throw new Error(reason);
+      if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error('Unexpected error');
       }

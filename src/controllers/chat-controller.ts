@@ -32,8 +32,8 @@ class ChatController {
 
   async getChatToken(chatId: number) {
     try {
+      // debugger
       const { token } = await this._api.getChatTokenRequest(chatId);
-
       return token;
     } catch (error: unknown) {
       errorHandler(error);
