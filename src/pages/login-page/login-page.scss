@@ -1,11 +1,13 @@
 @use '../../variables.scss' as *;
 
 .container {
-  width: 340px;
+  width: 100%;
+  max-width: 340px;
   padding: 50px 30px 30px;
+  margin: 10px;
   box-sizing: border-box;
-  box-shadow: 0 0 6px 0 #00000024;
   border-radius: 12px;
+  box-shadow: 0 0 6px 0 #00000024;
 
   &__headline {
     font-weight: 500;

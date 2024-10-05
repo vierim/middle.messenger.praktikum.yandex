@@ -1,3 +1,3 @@
-import { ProfilePage, EditProfilePage } from './profile-page';
+import ProfilePage from './profile-page';
 
-export { ProfilePage, EditProfilePage };
+export default ProfilePage;

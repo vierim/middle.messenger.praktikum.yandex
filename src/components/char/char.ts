@@ -1,17 +1,17 @@
 import Handlebars from 'handlebars';
-import { Component } from '../../core/component';
-import { template } from './char.tmpl';
-import { Props } from '../../core/component/types';
+import Component, { Props } from '../../core/component';
 
-export class Char extends Component {
+import { template } from './char.tmpl';
+
+class Char extends Component {
+  
   constructor(props: Props) {
     super('div', { ...props, class: 'char' });
   }
 
   render() {
-    const compiledInput = Handlebars.compile(template);
-    const result = compiledInput({ ...this._props });
-
-    return result;
+    return Handlebars.compile(template)({ ...this._props });
   }
 }
+
+export default Char;

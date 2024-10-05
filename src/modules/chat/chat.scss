@@ -8,6 +8,13 @@
   padding: 10px 20px 11px;
   height: 100%;
 
+  &__greeting {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   &__header {
     padding: 0 0 10px;
     box-sizing: border-box;
@@ -28,111 +35,52 @@
   }
 
   &__conversation {
-    height: 100%;
-  }
-
-  &__message {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-  }
-
-  &__attach-btn {
-    width: 32px;
-    height: 32px;
-    background-color: transparent;
-    background-image: url('/attach-icon.svg');
-    border: none;
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  &__send-btn {
-    width: 28px;
-    height: 28px;
-    background-color: transparent;
-    border: none;
-    background-image: url('/arrow-left.svg');
-    transform: rotate(180deg);
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  &__message-text {
-    flex-grow: 1;
-    height: 32px;
-    border-radius: 30px;
-    background-color: #efefef;
-    border: none;
-    font-size: 14px;
-    padding: 0 20px;
-
-    &::placeholder {
-      color: #999;
-    }
-  }
-}
-
-.conversation {
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  scroll-behavior: auto;
-  scrollbar-width: thin;
-
-  &__date {
-    text-align: center;
-    color: #999;
-    font-size: 14px;
-    box-sizing: border-box;
-    padding: 40px 0 30px;
-  }
-
-  &__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    height: calc(100% - 87px);
+    overflow: hidden;
   }
 
-  &__item {
-    border-radius: 12px;
-    padding: 11px;
+  &__controls-btn {
+    position: relative;
+    background-color: transparent;
+    padding-left: 37px;
+    border: none;
     box-sizing: border-box;
-    max-width: 402px;
+    height: 22px;
+    text-align: left;
 
-    & p {
-      font-size: 14px;
-      line-height: 18px;
-      margin: 0 0 12px;
-      padding: 0;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 22px;
+      height: 22px;
+    }
 
-      &:last-of-type {
-        margin-bottom: 0;
-      }
+    &:hover {
+      cursor: pointer;
     }
 
     &_type {
-      &_inbox {
-        align-self: flex-start;
-        background-color: #f8f8f8;
+      &_add-user {
+        &::before {
+          background-image: url('/add-user-btn.svg');
+        }
       }
 
-      &_outgoing {
-        align-self: flex-end;
-        background-color: #e4edfd;
+      &_remove-user {
+        &::before {
+          background-image: url('/remove-user-btn.svg');
+        }
       }
-    }
 
-    &:last-of-type {
-      margin-bottom: 30px;
+      &_remove-chat {
+        &::before {
+          background-image: url('/remove-chat-btn.svg');
+        }
+      }
     }
   }
 }

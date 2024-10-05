@@ -2,13 +2,12 @@ import './profile-page.scss';
 
 export const template = `
   <div class="profile">
-    <button class="profile__back-btn"></button>
+    {{{ backButton }}}
+
     <div class="profile__container">
       {{{ avatar }}}
       
-      {{#unless isEdit}}
-        <h1 class="profile__name">{{ userName }}</h1>
-      {{/unless}}
+      <h1 class="profile__name">{{ user.first_name }}</h1>
 
       <form name="profile-form" class="profile__form" novalidate>
         <ul class="chars-list">
@@ -37,30 +36,17 @@ export const template = `
           </li>
         </ul>
 
-        
-        {{#if isEdit }}
-          <div class="profile__controls-btn">
-            {{{ button }}}
-          </div>
-        {{ else }}
-          <ul class="profile__controls-list">
-            <li class="profile__controls-item">
-              <a href="/edit" class="profile__controls-link">
-                Изменить данные
-              </a>
-            </li>
-            <li class="profile__controls-item">
-              <a href="/password" class="profile__controls-link">
-                Изменить пароль
-              </a>
-            </li>
-            <li class="profile__controls-item">
-              <a href="/" class="profile__controls-link profile__controls-link_type_exit">
-                Выйти
-              </a>
-            </li>
-          </ul>
-        {{/if}}
+        <ul class="profile__controls-list">
+          <li class="profile__controls-item">
+            {{{ editProfilePageLink }}}
+          </li>
+          <li class="profile__controls-item">
+            {{{ editPasswordPageLink }}}
+          </li>
+          <li class="profile__controls-item">
+            {{{ logoutButton }}}
+          </li>
+        </ul>
 
       </form>
     </div>

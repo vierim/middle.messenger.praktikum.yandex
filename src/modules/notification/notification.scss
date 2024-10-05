@@ -1,0 +1,13 @@
+.notification {
+  position: absolute;
+  bottom: 50px;
+
+  &__container {
+    padding: 20px 30px;
+    box-sizing: border-box;
+    background-color: #ffb4b9;
+    opacity: 0.85;
+    border-radius: 12px;
+    box-shadow: 0 0 6px 0 rgb(0 0 0 / 14.1%);
+  }
+}

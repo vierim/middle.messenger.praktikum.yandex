@@ -7,6 +7,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+
+  &__image {
+    object-fit: cover;
+    width: 100%;
+  }
+
+  &__miss {
+    object-fit: contain;
+  }
 
   &__change-btn {
     position: absolute;

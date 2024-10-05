@@ -3,6 +3,7 @@ import Handlebars from 'handlebars';
 
 import { EventBus } from '../event-bus';
 import { Children, Lists, Props } from './types';
+import { isEqual } from '../utils';
 
 export default class Component {
   static EVENTS = {
@@ -15,6 +16,7 @@ export default class Component {
   private _element: HTMLElement | null = null;
   private _tagName: string = '';
   public _id: string | null = null;
+
   protected _props: Props;
   protected _children: Children;
   protected _lists: Lists;
@@ -30,10 +32,10 @@ export default class Component {
     const { children, props, lists } = this._separateProps(proposals);
 
     this._props = this._makePropsProxy({ ...props, __id: this._id });
-    this._children = children;
-    this._lists = lists;
-    this.eventBus = () => eventBus;
+    this._children = this._makePropsProxy(children);
+    this._lists = this._makePropsProxy(lists);
 
+    this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
     eventBus.emit(Component.EVENTS.INIT);
   }
@@ -71,19 +73,16 @@ export default class Component {
   }
 
   _componentDidUpdate(oldProps?: Props, newProps?: Props) {
-    const response = this.componentDidUpdate(oldProps, newProps);
-    if (!response) {
-      return;
+    if (this.componentDidUpdate(oldProps, newProps)) {
+      this.eventBus().emit(Component.EVENTS.FLOW_RENDER);
     }
-
-    this._render();
   }
 
   componentDidUpdate(oldProps?: Props, newProps?: Props) {
-    if(oldProps !== newProps) {
-      return false;
+    if (oldProps && newProps) {
+      return !isEqual(oldProps, newProps);
     }
-    
+
     return true;
   }
 
@@ -115,15 +114,17 @@ export default class Component {
     if (!nextProps) {
       return;
     }
+    const { props, lists } = this._separateProps(nextProps);
 
-    Object.assign(this._props, nextProps);
+    Object.assign(this._props, props);
+    Object.assign(this._lists, lists);
   };
 
   get element() {
     return this._element;
   }
 
-  compile(template: string, props?: Props): DocumentFragment {
+  compile(template: string, props: Props): DocumentFragment {
     const propsAndStubs = { ...props };
 
     if (this._children) {
@@ -145,7 +146,7 @@ export default class Component {
       Object.values(this._children).forEach((child) => {
         const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
         const childContent = child.getContent();
-        
+
         if (stub && childContent) {
           stub.replaceWith(childContent);
         }
@@ -162,7 +163,7 @@ export default class Component {
             if (item instanceof Component) {
               const itemContent = item.getContent();
 
-              if(itemContent) {
+              if (itemContent) {
                 listContent.content.append(itemContent);
               }
             } else {
@@ -178,8 +179,7 @@ export default class Component {
   }
 
   _render() {
-
-    if(!this._element) {
+    if (!this._element) {
       return;
     }
 
@@ -190,7 +190,7 @@ export default class Component {
 
     if (typeof block === 'string') {
       this._element.innerHTML = block;
-    } 
+    }
 
     if (typeof block === 'object') {
       this._element.appendChild(block as DocumentFragment);
@@ -225,7 +225,7 @@ export default class Component {
     return this._element;
   }
 
-  _makePropsProxy(props: Props) {
+  _makePropsProxy<T extends Record<string, unknown>>(props: T) {
     const self = this;
 
     return new Proxy(props, {
@@ -234,9 +234,15 @@ export default class Component {
         return typeof value === 'function' ? value.bind(target) : value;
       },
       set(target, prop, value) {
-        target[prop as string] = value;
+        const oldValue = target[prop as string];
 
-        self.eventBus().emit(Component.EVENTS.FLOW_CDU, { ...target }, target);
+        if (oldValue !== value) {
+          const oldProps = { ...target };
+          (target as Record<string, unknown>)[prop as string] = value;
+
+          self.eventBus().emit(Component.EVENTS.FLOW_CDU, oldProps, target);
+        }
+
         return true;
       },
       deleteProperty() {
@@ -254,6 +260,10 @@ export default class Component {
 
     if (typeof this._props?.class === 'string') {
       element.setAttribute('class', this._props.class);
+    }
+
+    if (typeof this._props?.href === 'string') {
+      element.setAttribute('href', this._props.href);
     }
 
     return element;

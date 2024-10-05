@@ -18,8 +18,6 @@ export const template = `
       {{/if}}
     </p>
 
-    <a href="/" class="error-data__link">
-      Назад
-    </a>
+    {{{ backButton }}}
   </div>
 `;

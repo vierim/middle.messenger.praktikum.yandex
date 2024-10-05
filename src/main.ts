@@ -1,44 +1,49 @@
-import renderDOM from './core/utils/render';
-import { Component } from './core/component';
+import router from './services/router';
+
 import {
-  MainPage,
   LoginPage,
-  ErrorPage,
   RegistrationPage,
-  ProfilePage,
   FeedPage,
-  EditPasswordPage,
+  ProfilePage,
   EditProfilePage,
+  EditPasswordPage,
+  ErrorPage,
 } from './pages';
 
 import './index.scss';
 
-let page: Component;
+router.setErrorRoute(ErrorPage);
 
-switch (window.location.pathname) {
-  case '/':
-    page = MainPage;
-    break;
-  case '/login':
-    page = LoginPage;
-    break;
-  case '/registration':
-    page = RegistrationPage;
-    break;
-  case '/feed':
-    page = FeedPage;
-    break;
-  case '/profile':
-    page = ProfilePage;
-    break;
-  case '/edit':
-    page = EditProfilePage;
-    break;
-  case '/password':
-    page = EditPasswordPage;
-    break;
-  default:
-    page = ErrorPage;
-}
+router
+  .push({
+    url: '/',
+    component: LoginPage,
+    config: { anonymousOnly: true },
+  })
+  .push({
+    url: '/sign-up',
+    component: RegistrationPage,
+    config: { anonymousOnly: true },
+  })
+  .push({
+    url: '/messenger',
+    component: FeedPage,
+    config: { authOnly: true },
+  })
+  .push({
+    url: '/settings',
+    component: ProfilePage,
+    config: { authOnly: true },
+  })
+  .push({
+    url: '/settings/edit-profile',
+    component: EditProfilePage,
+    config: { authOnly: true },
+  })
+  .push({
+    url: '/settings/edit-password',
+    component: EditPasswordPage,
+    config: { authOnly: true },
+  });
 
-renderDOM('#app', page);
+router.start();

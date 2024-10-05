@@ -1,12 +1,8 @@
 import SearchBar from './search-bar';
-import ContactsList from './contacts-list';
-import ContactItem from './contacts-list/components/contact-item';
+import ChatsList from './chats-list';
+import ContactItem from './chats-list/components/chats-list-item';
+import Notification from './notification';
 
 import Chat from './chat';
 
-export {
-  SearchBar,
-  ContactsList,
-  ContactItem,
-  Chat,
-};
+export { SearchBar, ChatsList, ContactItem, Chat, Notification };

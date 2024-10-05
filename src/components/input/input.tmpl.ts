@@ -1,26 +1,24 @@
+import './input.scss';
+
 export const template = `
+  {{#if isFileInput}}
+
+    <input 
+      type="file"
+      name={{ name }} 
+      id={{ name }} 
+      accept="{{ acceptFileTypes }}"
+    >
+
+  {{else}}
+
     <input
       class="input__field"
       name={{ name }}
       type={{ type }}
       id={{ name }}
       placeholder=" "
-
-      {{#if minLength }}
-        minlength={{ minLength }}
-      {{/if}}
-
-      {{#if maxLength }}
-        maxlength={{ maxLength }}
-      {{/if}}
-
-      {{#if pattern }}
-        pattern={{ pattern }}
-      {{/if}}
-
-      {{#if required }}
-        required
-      {{/if}}
+      autocomplete="off"
     >
     <label 
       class="input__label"
@@ -30,4 +28,6 @@ export const template = `
     </label>
 
     <span class="input__error-text error-message {{ name }}-error"></span>
+    
+  {{/if}}
 `;

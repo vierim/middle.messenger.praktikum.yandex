@@ -1,20 +1,40 @@
-import { PageComponent } from '../../core/page';
-import { ContactsList, SearchBar, Chat, ContactItem } from '../../modules';
+import Component, { Props } from '../../core/component';
+import { Link } from '../../core/router';
 
-import { contacts } from './mock-data';
+import { chatController } from '../../controllers';
+import { SearchBar, ChatsList, Chat } from '../../modules';
+
 import { template } from './feed-page.tmpl';
-import { Props } from '../../core/component/types';
 
-class FeedPageFactory extends PageComponent {
-  constructor(template: string, props?: Props) {
-    super(template, props);
+class FeedPage extends Component {
+
+  constructor(props?: Props) {
+    super('main', {
+      ...props,
+      
+      class: 'layout',
+
+      profilePageLink: new Link({
+        anchor: 'Профиль',
+        href: '/settings',
+        class: 'feed__nav-link',
+      }),
+      searchBar: new SearchBar(),
+      chatsList: new ChatsList(),
+      activeChat: new Chat(),
+    });
+  }
+
+  render() {
+    return this.compile(template, {
+      ...this._children,
+      ...this._props,
+    });
+  }
+
+  async componentDidMount() {
+    await chatController.getAllChats();
   }
 }
 
-export const FeedPage = new FeedPageFactory(template, {
-  searchBar: new SearchBar(),
-  contactsList: new ContactsList({
-    items: contacts.map((item) => new ContactItem(item)),
-  }),
-  chat: new Chat(),
-});
+export default FeedPage;

@@ -1,140 +1,126 @@
-import { PageComponent } from '../../core/page';
-import { handleFieldValidity, handleFormSubmit } from '../../core/helpers/forms';
-import { Props } from '../../core/component/types';
-import { Avatar, Char, Button } from '../../components';
-import { template } from './profile-page.tmpl';
+import Component from '../../core/component';
+import { Link } from '../../core/router';
+import { connect } from '../../core/store';
 
-class ProfilePageFactory extends PageComponent {
-  constructor(template: string, props?: Props) {
-    super(template, props);
+import store, { AppState } from '../../services/store';
+import { authController } from '../../controllers';
+
+import { Avatar, BackButton, Button, Char } from '../../components';
+
+import type { ProfilePageProps } from './interface';
+
+import { template } from './profile-page.tmpl';
+import { UserData } from '../../entities/user';
+
+class ProfilePage extends Component {
+  constructor(props?: ProfilePageProps) {
+    super('main', {
+      ...props,
+      class: 'layout',
+
+      avatar: new Avatar({
+        changeable: true,
+      }),
+      backButton: new BackButton({
+        class: 'profile__back-btn',
+        url: '/messenger',
+      }),
+
+      email: new Char({
+        label: 'Почта',
+        type: 'email',
+        name: 'email',
+        value: '',
+      }),
+      login: new Char({
+        label: 'Логин',
+        type: 'text',
+        name: 'login',
+        value: '',
+      }),
+      name: new Char({
+        label: 'Имя',
+        type: 'text',
+        name: 'first_name',
+        value: '',
+      }),
+      secondName: new Char({
+        label: 'Фамилия',
+        type: 'text',
+        name: 'second_name',
+        value: '',
+      }),
+      nick: new Char({
+        label: 'Имя в чате',
+        type: 'text',
+        name: 'display_name',
+        value: '',
+      }),
+      phone: new Char({
+        label: 'Телефон',
+        type: 'tel',
+        name: 'phone',
+        value: '',
+      }),
+
+      editProfilePageLink: new Link({
+        anchor: 'Изменить данные',
+        href: '/settings/edit-profile',
+        class: 'profile__controls-link',
+      }),
+      editPasswordPageLink: new Link({
+        anchor: 'Изменить пароль',
+        href: '/settings/edit-password',
+        class: 'profile__controls-link',
+      }),
+
+      logoutButton: new Button({
+        text: 'Выйти',
+        type: 'button',
+        class: 'profile__logout-button',
+        events: {
+          click: (event: Event) => {
+            event.preventDefault();
+            this.handleLogoutClick();
+          },
+        },
+      }),
+    });
+  }
+
+  render() {
+    return this.compile(template, {
+      ...this._children,
+      ...this._props,
+    });
+  }
+
+  componentDidMount(): void {
+    if (this._props.user) {
+      const user = this._props.user as UserData;
+
+      this._children.email.setProps({ value: user.email });
+      this._children.login.setProps({ value: user.login });
+      this._children.name.setProps({ value: user.first_name });
+      this._children.secondName.setProps({
+        value: user.second_name,
+      });
+      this._children.nick.setProps({
+        value: user.display_name,
+      });
+      this._children.phone.setProps({
+        value: user.phone,
+      });
+    }
+  }
+
+  async handleLogoutClick() {
+    await authController.logout();
   }
 }
 
-export const ProfilePage = new ProfilePageFactory(template, {
-  isEdit: false,
-  avatar: new Avatar({
-    changeable: false,
-  }),
-  userName: 'Иван',
-  email: new Char({
-    label: 'Почта',
-    type: 'email',
-    name: 'email',
-    value: 'pochta@yandex.ru',
-  }),
-  login: new Char({
-    label: 'Логин',
-    type: 'text',
-    name: 'login', 
-    value: 'ivanivanov',
-  }),
-  name: new Char({
-    label: 'Имя',
-    type: 'text',
-    name: 'first_name', 
-    value: 'Иван',
-  }),
-  secondName: new Char({
-    label: 'Фамилия',
-    type: 'text',
-    name: 'second_name', 
-    value: 'Иванов',
-  }),
-  nick: new Char({
-    label: 'Имя в чате',
-    type: 'text',
-    name: 'display_name', 
-    value: 'Иван',
-  }),
-  phone: new Char({
-    label: 'Телефон',
-    type: 'tel',
-    name: 'phone', 
-    value: '+79099673030',
-  }),
-});
+export default connect<ProfilePageProps, AppState>(store, ProfilePage, mapStateToProps);
 
-export const EditProfilePage = new ProfilePageFactory(template, {
-  isEdit: true,
-  avatar: new Avatar({ 
-    changeable: true,
-  }),
-  button: new Button({
-    text: 'Сохранить',
-  }),
-  email: new Char({
-    label: 'Почта',
-    type: 'email',
-    name: 'email',
-    value: 'pochta@yandex.ru',
-    pattern: '^[A-Za-z\\d._]+@[A-Za-z]+\\.[A-Za-z]{2,}$',
-    isEdit: true,
-  }),
-  login: new Char({
-    label: 'Логин',
-    type: 'text',
-    name: 'login', 
-    value: 'ivanivanov',
-    minLength: '3',
-    maxLength: '20',
-    pattern: '^(?=.*[A-Za-z])[A-Za-z0-9_]+$',
-    required: true,
-    events: {
-      focusout: handleFieldValidity,
-    },
-    isEdit: true,
-  }),
-  name: new Char({
-    label: 'Имя',
-    type: 'text',
-    name: 'first_name', 
-    value: 'Иван',
-    pattern: '^[A-ZА-Я][a-zA-Zа-яА-Я]*$',
-    required: true,
-    events: {
-      focusout: handleFieldValidity,
-    },
-    isEdit: true
-  }),
-  secondName: new Char({
-    label: 'Фамилия',
-    type: 'text',
-    name: 'second_name', 
-    value: 'Иванов',
-    pattern: '^[A-ZА-Я][a-zA-Zа-яА-Я]*$',
-    required: true,
-    events: {
-      focusout: handleFieldValidity,
-    },
-    isEdit: true
-  }),
-  nick: new Char({
-    label: 'Имя в чате',
-    type: 'text',
-    name: 'display_name', 
-    value: 'Иван',
-    pattern: '^[A-ZА-Я][a-zA-Zа-яА-Я]*$',
-    required: true,
-    events: {
-      focusout: handleFieldValidity,
-    },
-    isEdit: true
-  }),
-  phone: new Char({
-    label: 'Телефон',
-    type: 'tel',
-    name: 'phone', 
-    value: '+79099673030',
-    minLength: '10',
-    maxLength: '15',
-    pattern: '^\\+?\\d*$',
-    required: true,
-    events: {
-      focusout: handleFieldValidity,
-    },
-    isEdit: true
-  }),
-  events: {
-    submit: handleFormSubmit,
-  },
-});
+function mapStateToProps(state: AppState) {
+  return { user: { ...state.user } };
+}

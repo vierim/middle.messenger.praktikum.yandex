@@ -4,16 +4,18 @@ export const template = `
   <div class="feed">
     <div class="feed__sidebar">
       <nav class="feed__nav">
-        <a href="/profile" class="feed__nav-link">Профиль</a>
+        {{{ profilePageLink }}}
       </nav>
+
       <div class="feed__search-bar">
         {{{ searchBar }}}
       </div>
 
-      {{{ contactsList }}}
+      {{{ chatsList }}}
     </div>
+    
     <div class="feed__chat">
-      {{{ chat }}}
+      {{{ activeChat }}}
     </div>
   </div>
 `;
