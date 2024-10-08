@@ -1,4 +1,6 @@
+import { authController } from './controllers';
 import router from './services/router';
+import { errorHandler } from './utils/error-handler';
 
 import {
   LoginPage,
@@ -11,6 +13,12 @@ import {
 } from './pages';
 
 import './index.scss';
+
+try {
+  await authController.getUserData();
+} catch (error: unknown) {
+  errorHandler(error);
+}
 
 router.setErrorRoute(ErrorPage);
 

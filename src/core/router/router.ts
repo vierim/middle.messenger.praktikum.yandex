@@ -1,4 +1,3 @@
-import { authController } from '../../controllers';
 import store from '../../services/store';
 import Component from '../component';
 
@@ -65,8 +64,6 @@ class Router {
     });
 
     const { pathname } = document.location;
-
-    await authController.getUserData();
 
     this.setRoute(pathname);
   }
