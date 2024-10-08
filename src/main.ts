@@ -14,11 +14,9 @@ import {
 
 import './index.scss';
 
-try {
-  await authController.getUserData();
-} catch (error: unknown) {
-  errorHandler(error);
-}
+authController.getUserData().then(() => {
+  router.navigate('/messenger');
+}).catch(errorHandler);
 
 router.setErrorRoute(ErrorPage);
 
