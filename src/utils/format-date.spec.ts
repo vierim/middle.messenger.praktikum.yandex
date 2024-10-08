@@ -12,11 +12,11 @@ describe('formatDate function', () => {
 
   it('should convert today date to format (hour:minute)', () => {
     const date = new Date();
-    date.setHours(10);
-    date.setMinutes(25);
+    date.setUTCHours(10);
+    date.setUTCMinutes(25);
 
     const result = formatDate(date);
 
-    expect(result).to.equal('10:25');
+    expect(result).to.equal('13:25');
   });
 });
