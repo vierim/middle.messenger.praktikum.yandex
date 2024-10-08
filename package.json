@@ -28,6 +28,7 @@
     "jsdom": "^25.0.1",
     "mocha": "^10.7.3",
     "sass": "^1.75.0",
+    "husky": "^8.0.3",
     "sinon": "^19.0.2",
     "stylelint": "^16.6.1",
     "stylelint-config-standard-scss": "^13.1.0",
@@ -40,5 +41,10 @@
     "express": "^4.19.2",
     "handlebars": "^4.7.8",
     "uuid": "^9.0.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm-run-all test eslint stylelint"
+    }
   }
 }

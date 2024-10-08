@@ -82,6 +82,7 @@ class Router {
   }
 
   private setRoute(url: string) {
+    console.log(url);
     if (!this.renderEngine) {
       throw new Error('Unavailable RenderEngine');
     }
