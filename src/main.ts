@@ -1,4 +1,6 @@
+import { authController } from './controllers';
 import router from './services/router';
+import { errorHandler } from './utils/error-handler';
 
 import {
   LoginPage,
@@ -11,6 +13,10 @@ import {
 } from './pages';
 
 import './index.scss';
+
+authController.getUserData().then(() => {
+  router.navigate('/messenger');
+}).catch(errorHandler);
 
 router.setErrorRoute(ErrorPage);
 

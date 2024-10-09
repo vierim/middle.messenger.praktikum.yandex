@@ -1,4 +1,3 @@
-import { authController } from '../../controllers';
 import store from '../../services/store';
 import Component from '../component';
 
@@ -66,8 +65,6 @@ class Router {
 
     const { pathname } = document.location;
 
-    await authController.getUserData();
-
     this.setRoute(pathname);
   }
 
@@ -85,6 +82,7 @@ class Router {
   }
 
   private setRoute(url: string) {
+    console.log(url);
     if (!this.renderEngine) {
       throw new Error('Unavailable RenderEngine');
     }

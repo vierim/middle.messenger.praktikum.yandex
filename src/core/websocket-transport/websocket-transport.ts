@@ -5,7 +5,7 @@ class WebSocketTransport {
   private static __instance: WebSocketTransport;
 
   private _socket!: WebSocket;
-  private _timerId?: number;
+  private _timerId?: NodeJS.Timeout;
   private _store: StoreInterface<AppState>;
 
   constructor(url: string, store: StoreInterface<AppState>) {
